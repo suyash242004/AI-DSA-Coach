@@ -1,0 +1,4 @@
+streamlit
+openai
+tiktoken
+google-generativeai

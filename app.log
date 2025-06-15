@@ -1,0 +1,1 @@
+2025-06-09 00:51:25,604 - ERROR - Mentor input processing failed: 'AgentOrchestrator' object has no attribute 'get_hint_suggestions'
