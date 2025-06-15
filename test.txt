@@ -1,0 +1,7 @@
+Mentor Agent : 
+I am unable to even imagine single approch
+so can we use for loop..
+so can we use double for loop....   dont use..
+Use two nested loops to try every pair and check if their sum equals target
+
+Loop through the list once.For each number, see if target - number is in a hash map.If yes, return the pair.
