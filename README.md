@@ -1,4 +1,4 @@
-🧠 AI DSA Coach – Espyr Hackathon Submission
+### 🧠 AI DSA Coach – Espyr Hackathon Submission
 
 A smart, multi-agent web application to guide users in solving Data Structures and Algorithms (DSA) problems — like LeetCode, but with an AI mentor. 🚀
 
