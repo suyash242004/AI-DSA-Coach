@@ -5,3 +5,2236 @@ so can we use double for loop....   dont use..
 Use two nested loops to try every pair and check if their sum equals target
 
 Loop through the list once.For each number, see if target - number is in a hash map.If yes, return the pair.
+
+I am unable to think about approach
+can we use for loops
+we can use two for loops
+we can use two for loops and try each and every pair's sum equal to target
+we can use two for loops and try each and every pair's sum equal to target... so outer loop point at particular index and then inner loop will move and we will check sum of elements at that index
+Loop through each element of the array with index i. For each element at i, loop through the rest of the array with index j (where j > i) to avoid duplicate pairs and self-pairing.
+Check if the sum of array[i] + array[j] equals the target. If it does, return the pair of indices [i, j].
+
+ vector<int> twoSum(vector<int>& nums, int target) {
+
+       int n = nums.size();
+       for(int i = 0 ; i < n-1; i++){
+           for(int j = i + 1; j < n ; j++){
+               if(nums[i] + nums[j] == target){
+                  return {i,j};
+               }
+           }
+       } 
+        return {-1,-1};
+
+
+def two_sum(nums, target):
+    n = len(nums)
+    for i in range(n - 1):
+        for j in range(i + 1, n):
+            if nums[i] + nums[j] == target:
+                return [i, j]
+    return [-1, -1]
+
+what is syntax error ?   
+
+
+
+"I don't understand this problem"
+"I can use loops"
+"I can use two for loops to check all pairs"
+get hint
+"Use nested loops, outer loop goes through each element, inner loop checks remaining elements"
+
+"Use two nested loops: outer loop from index 0 to n-1, inner loop from index i+1 to n-1.
+ For each pair, check if nums[i] + nums[j] equals target. If yes, return [i, j]. If no pairs found, return empty array."
+
+ "I can use a hash map to solve this in O(n) time"
+
+ "Iterate through array once. For each element, calculate complement (target - current element). Check if complement exists in hash map. 
+ If yes, return [hash_map[complement], current_index]. If no, store current element and index in hash map. This gives O(n) time complexity and O(n) space complexity. 
+ Edge cases: empty array, no solution exists, duplicate values."
+
+
+Syntax Error 
+
+def two_sum(nums, target):
+    for i in range(len(nums))
+        for j in range(i+1, len(nums))  # Missing colon
+            if nums[i] + nums[j] == target:
+                return [i, j]
+    return []
+
+Logic Error (Shows logic analysis)
+
+def two_sum(nums, target):
+    for i in range(len(nums)):
+        for j in range(i, len(nums)):  # BUG: should be i+1
+            if nums[i] + nums[j] == target:
+                return [i, j]
+    return []
+
+Edge Case Missing
+
+def two_sum(nums, target):
+    for i in range(len(nums)):
+        for j in range(i+1, len(nums)):
+            if nums[i] + nums[j] == target:
+                return [i, j]
+    # Missing return statement for no solution
+
+Working but Inefficient 
+
+def two_sum(nums, target):
+    for i in range(len(nums)):
+        for j in range(i+1, len(nums)):
+            if nums[i] + nums[j] == target:
+                return [i, j]
+    return []
+
+Optimized Solution
+
+def two_sum(nums, target):
+    hash_map = {}
+    for i, num in enumerate(nums):
+        complement = target - num
+        if complement in hash_map:
+            return [hash_map[complement], i]
+        hash_map[num] = i
+    return []
+
+"What if there are duplicate numbers in the array?"
+"Can you analyze the time and space complexity of my solution?"
+"What test cases are you running on my code?"  
+"What test cases are failing?"
+"How can I optimize this further?"
+"What edge cases should I consider?"
+"Is my algorithm correct?"
+"Can you explain the time complexity?"  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+render_code_panel:
+
+
+# def render_evaluation_panel():
+#     st.markdown("### 📊 Performance Evaluation")
+    
+#     with st.spinner("🤖 Generating comprehensive evaluation..."):
+#         selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+        
+#         evaluation = st.session_state.evaluation_agent.generate_evaluation(
+#             skill_level=st.session_state.skill_level,
+#             hints_used=st.session_state.hints_used,
+#             final_code=st.session_state.user_code,
+#             problem=selected_problem,
+#             conversation_history=st.session_state.mentor_conversation + st.session_state.code_conversation
+#         )
+        
+#         # Performance summary
+#         st.markdown("#### 🎯 Performance Summary")
+#         st.info(evaluation["summary"])
+        
+#         # Detailed analysis
+#         st.markdown("#### 🔍 Detailed Analysis")
+#         st.markdown(evaluation["detailed_analysis"])
+        
+#         # Recommendations
+#         st.markdown("#### 🚀 Next Steps & Recommendations")
+#         st.markdown(evaluation["recommendations"])
+        
+#         # Action buttons
+#         col1, col2, col3 = st.columns(3)
+        
+#         with col1:
+#             if st.button("🔄 Try Another Problem", type="primary", use_container_width=True):
+#                 # Reset for new problem
+#                 st.session_state.orchestrator.reset()
+#                 st.session_state.mentor_conversation = []
+#                 st.session_state.code_conversation = []
+#                 st.session_state.user_code = LANGUAGE_TEMPLATES[st.session_state.selected_language]
+#                 st.session_state.approach_approved = False
+#                 st.session_state.skill_level = None
+#                 st.session_state.hints_used = 0
+#                 st.rerun()
+        
+#         with col2:
+#             if st.button("💻 Back to Coding", use_container_width=True):
+#                 st.session_state.orchestrator.transition_to_coding()
+#                 st.rerun()
+        
+#         with col3:
+#             if st.button("🧠 Back to Discussion", use_container_width=True):
+#                 st.session_state.orchestrator.transition_to_mentoring()
+#                 st.rerun()
+        
+#         # Additional info section
+#         st.markdown("---")
+#         if st.button("📈 View Session Summary", use_container_width=True):
+#             st.markdown("### 📈 Session Progress")
+#             st.markdown(f"**Problem:** {st.session_state.current_problem}")
+#             st.markdown(f"**Language:** {st.session_state.selected_language}")
+#             st.markdown(f"**Skill Level:** {st.session_state.skill_level or 'Not determined'}")
+#             st.markdown(f"**Hints Used:** {st.session_state.hints_used}")
+#             st.markdown(f"**Approach Approved:** {'✅ Yes' if st.session_state.approach_approved else '❌ No'}")
+            
+#             # Show conversation stats
+#             mentor_msgs = len([m for m in st.session_state.mentor_conversation if m["role"] == "user"])
+#             code_msgs = len([m for m in st.session_state.code_conversation if m["role"] == "user"])
+#             st.markdown(f"**Mentor Interactions:** {mentor_msgs}")
+#             st.markdown(f"**Code Discussions:** {code_msgs}")
+
+
+
+
+
+
+
+
+
+
+
+Evaluation Old:
+
+# from utils.gemini_client import get_gemini_model
+# import json
+# import re
+# from typing import Dict, List, Any
+
+# class EvaluationAgent:
+#     def __init__(self):
+#         self.model = get_gemini_model()
+    
+#     def generate_evaluation(self, skill_level: str, hints_used: int, final_code: str, 
+#                           problem: dict, conversation_history: List[dict]) -> Dict[str, str]:
+#         """
+#         Generate comprehensive evaluation of the learning session
+#         """
+        
+#         # Analyze conversation quality
+#         conversation_analysis = self._analyze_conversation(conversation_history, skill_level)
+        
+#         # Analyze code quality
+#         code_analysis = self._analyze_code_quality(final_code, problem, skill_level)
+        
+#         prompt = f"""
+# You are an expert educational evaluator for DSA learning. Provide a comprehensive evaluation of this learning session.
+
+# Session Details:
+# - Problem: {problem['title']} ({problem['difficulty']})
+# - Student Level: {skill_level}
+# - Hints Used: {hints_used}
+# - Conversation Quality: {conversation_analysis}
+# - Code Analysis: {code_analysis}
+
+# Final Code:
+# ```python
+# {final_code}
+# ```
+
+# Provide evaluation in JSON format:
+# {{
+#     "overall_performance": "Excellent|Good|Satisfactory|Needs Improvement",
+#     "summary": "Brief overall summary of performance",
+#     "detailed_analysis": "Detailed breakdown of strengths and areas for improvement",
+#     "thought_process_score": 1-10,
+#     "code_quality_score": 1-10,
+#     "problem_solving_approach": "Analysis of their approach",
+#     "learning_indicators": ["List of positive learning behaviors observed"],
+#     "improvement_areas": ["Specific areas to focus on"],
+#     "recommendations": "Specific next steps and practice suggestions",
+#     "skill_level_assessment": "Current skill level assessment with reasoning",
+#     "next_difficulty": "Recommended next problem difficulty"
+# }}
+
+# Consider:
+# 1. How well did they articulate their thought process?
+# 2. Did they show good problem-solving methodology?
+# 3. How efficiently did they use hints?
+# 4. Code correctness and optimization
+# 5. Learning progression indicators
+# """
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             response_text = response.text.strip()
+            
+#             # Extract JSON from response
+#             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+#             if json_match:
+#                 evaluation_data = json.loads(json_match.group())
+                
+#                 # Format the evaluation nicely
+#                 return {
+#                     "summary": self._format_summary(evaluation_data),
+#                     "detailed_analysis": self._format_detailed_analysis(evaluation_data),
+#                     "recommendations": self._format_recommendations(evaluation_data, skill_level),
+#                     "raw_data": evaluation_data
+#                 }
+#             else:
+#                 raise ValueError("No JSON found in response")
+                
+#         except Exception as e:
+#             print(f"[Evaluation Agent Error] {e}")
+#             return self._generate_fallback_evaluation(skill_level, hints_used, final_code)
+    
+#     def _analyze_conversation(self, conversation_history: List[dict], skill_level: str) -> str:
+#         """Analyze the quality of mentor-student conversation"""
+        
+#         if not conversation_history:
+#             return "Limited conversation data"
+        
+#         user_messages = [msg for msg in conversation_history if msg.get("role") == "user"]
+        
+#         analysis_points = []
+        
+#         # Check conversation depth
+#         if len(user_messages) >= 3:
+#             analysis_points.append("Good engagement level")
+#         elif len(user_messages) >= 1:
+#             analysis_points.append("Moderate engagement")
+#         else:
+#             analysis_points.append("Limited engagement")
+        
+#         # Analyze message quality (basic heuristics)
+#         avg_message_length = sum(len(msg.get("content", "")) for msg in user_messages) / max(len(user_messages), 1)
+        
+#         if avg_message_length > 100:
+#             analysis_points.append("Detailed responses")
+#         elif avg_message_length > 50:
+#             analysis_points.append("Adequate detail in responses")
+#         else:
+#             analysis_points.append("Brief responses")
+        
+#         return "; ".join(analysis_points)
+    
+#     def _analyze_code_quality(self, code: str, problem: dict, skill_level: str) -> str:
+#         """Basic code quality analysis"""
+        
+#         if not code.strip():
+#             return "No code submitted"
+        
+#         analysis_points = []
+        
+#         # Basic metrics
+#         lines_of_code = len([line for line in code.split('\n') if line.strip()])
+        
+#         if lines_of_code > 50:
+#             analysis_points.append("Comprehensive solution")
+#         elif lines_of_code > 10:
+#             analysis_points.append("Well-structured solution")
+#         else:
+#             analysis_points.append("Concise solution")
+        
+#         # Check for common patterns
+#         if "def " in code:
+#             analysis_points.append("Function-based approach")
+        
+#         if any(keyword in code.lower() for keyword in ["time", "space", "complexity"]):
+#             analysis_points.append("Complexity-aware")
+        
+#         if "# " in code or '"""' in code:
+#             analysis_points.append("Well-commented")
+        
+#         return "; ".join(analysis_points)
+    
+#     def _format_summary(self, evaluation_data: dict) -> str:
+#         """Format the performance summary"""
+        
+#         performance = evaluation_data.get("overall_performance", "Good")
+#         thought_score = evaluation_data.get("thought_process_score", 7)
+#         code_score = evaluation_data.get("code_quality_score", 7)
+        
+#         summary_parts = [
+#             f"## 🎯 Overall Performance: {performance}",
+#             "",
+#             f"**Thought Process:** {thought_score}/10 {'🌟' * min(thought_score//2, 5)}",
+#             f"**Code Quality:** {code_score}/10 {'🌟' * min(code_score//2, 5)}",
+#             "",
+#             evaluation_data.get("summary", "Good work on this problem!")
+#         ]
+        
+#         return "\n".join(summary_parts)
+    
+#     def _format_detailed_analysis(self, evaluation_data: dict) -> str:
+#         """Format the detailed analysis"""
+        
+#         analysis_parts = []
+        
+#         # Problem-solving approach
+#         if evaluation_data.get("problem_solving_approach"):
+#             analysis_parts.extend([
+#                 "### 🧠 Problem-Solving Approach",
+#                 evaluation_data["problem_solving_approach"],
+#                 ""
+#             ])
+        
+#         # Learning indicators
+#         if evaluation_data.get("learning_indicators"):
+#             analysis_parts.extend([
+#                 "### ✅ Positive Learning Behaviors",
+#                 ""
+#             ])
+#             for indicator in evaluation_data["learning_indicators"]:
+#                 analysis_parts.append(f"• {indicator}")
+#             analysis_parts.append("")
+        
+#         # Areas for improvement
+#         if evaluation_data.get("improvement_areas"):
+#             analysis_parts.extend([
+#                 "### 🎯 Areas for Growth",
+#                 ""
+#             ])
+#             for area in evaluation_data["improvement_areas"]:
+#                 analysis_parts.append(f"• {area}")
+#             analysis_parts.append("")
+        
+#         # Skill level assessment
+#         if evaluation_data.get("skill_level_assessment"):
+#             analysis_parts.extend([
+#                 "### 📊 Skill Level Assessment",
+#                 evaluation_data["skill_level_assessment"],
+#                 ""
+#             ])
+        
+#         return "\n".join(analysis_parts)
+    
+#     def _format_recommendations(self, evaluation_data: dict, skill_level: str) -> str:
+#         """Format recommendations and next steps"""
+        
+#         rec_parts = []
+        
+#         # Next difficulty recommendation
+#         next_diff = evaluation_data.get("next_difficulty", "Same level")
+#         rec_parts.extend([
+#             f"### 🚀 Next Steps",
+#             f"**Recommended Next Difficulty:** {next_diff}",
+#             ""
+#         ])
+        
+#         # Specific recommendations
+#         if evaluation_data.get("recommendations"):
+#             rec_parts.extend([
+#                 "### 💡 Specific Recommendations",
+#                 evaluation_data["recommendations"],
+#                 ""
+#             ])
+        
+#         # Practice suggestions based on skill level
+#         practice_suggestions = self._get_practice_suggestions(skill_level, evaluation_data)
+#         if practice_suggestions:
+#             rec_parts.extend([
+#                 "### 📚 Practice Suggestions",
+#                 ""
+#             ])
+#             for suggestion in practice_suggestions:
+#                 rec_parts.append(f"• {suggestion}")
+        
+#         return "\n".join(rec_parts)
+    
+#     def _get_practice_suggestions(self, skill_level: str, evaluation_data: dict) -> List[str]:
+#         """Generate practice suggestions based on performance"""
+        
+#         suggestions = []
+        
+#         # Based on skill level
+#         if skill_level == "Beginner":
+#             suggestions.extend([
+#                 "Practice more array and string manipulation problems",
+#                 "Focus on understanding time complexity basics",
+#                 "Work through problems step-by-step with pen and paper first"
+#             ])
+#         elif skill_level == "Intermediate":
+#             suggestions.extend([
+#                 "Explore advanced data structures (trees, graphs)",
+#                 "Practice dynamic programming problems",
+#                 "Focus on optimization techniques"
+#             ])
+#         else:  # Advanced
+#             suggestions.extend([
+#                 "Tackle system design problems",
+#                 "Practice competitive programming challenges",
+#                 "Focus on proving correctness of solutions"
+#             ])
+        
+#         # Based on performance
+#         thought_score = evaluation_data.get("thought_process_score", 7)
+#         code_score = evaluation_data.get("code_quality_score", 7)
+        
+#         if thought_score < 6:
+#             suggestions.append("Practice explaining your approach before coding")
+        
+#         if code_score < 6:
+#             suggestions.append("Focus on writing cleaner, more readable code")
+        
+#         return suggestions[:4]  # Limit to 4 suggestions
+    
+#     def _generate_fallback_evaluation(self, skill_level: str, hints_used: int, final_code: str) -> Dict[str, str]:
+#         """Generate a basic evaluation when AI analysis fails"""
+        
+#         performance_level = "Good"
+#         if hints_used <= 1:
+#             performance_level = "Excellent"
+#         elif hints_used >= 4:
+#             performance_level = "Needs Improvement"
+        
+#         return {
+#             "summary": f"""
+# ## 🎯 Overall Performance: {performance_level}
+
+# **Thought Process:** 7/10 🌟🌟🌟
+# **Code Quality:** 7/10 🌟🌟🌟
+
+# You've made good progress on this problem! Your approach shows understanding of the core concepts.
+# """,
+#             "detailed_analysis": f"""
+# ### 🧠 Problem-Solving Approach
+# You demonstrated a {skill_level.lower()}-level approach to this problem. 
+
+# ### ✅ Positive Learning Behaviors
+# • Engaged with the mentor system
+# • {"Used hints efficiently" if hints_used <= 2 else "Sought help when needed"}
+# • Completed the coding phase
+
+# ### 🎯 Areas for Growth
+# • Continue practicing similar problems
+# • Focus on explaining your approach clearly
+# """,
+#             "recommendations": f"""
+# ### 🚀 Next Steps
+# **Recommended Next Difficulty:** {"Same level" if hints_used > 2 else "Slightly harder"}
+
+# ### 💡 Specific Recommendations
+# Continue practicing problems at your level to build confidence and pattern recognition.
+
+# ### 📚 Practice Suggestions
+# • Work on similar problem types
+# • Practice explaining solutions out loud
+# • Focus on time complexity analysis
+# """,
+#             "raw_data": {
+#                 "overall_performance": performance_level,
+#                 "thought_process_score": 7,
+#                 "code_quality_score": 7
+#             }
+#         }
+    
+#     def generate_progress_report(self, session_history: List[dict]) -> str:
+#         """Generate a progress report across multiple problems"""
+        
+#         if not session_history:
+#             return "No session history available."
+        
+#         prompt = f"""
+# Analyze this student's progress across multiple DSA problems and generate a learning progress report.
+
+# Session History:
+# {json.dumps(session_history, indent=2)}
+
+# Focus on:
+# 1. Skill progression over time
+# 2. Consistent strengths and weaknesses
+# 3. Learning velocity
+# 4. Recommended learning path
+
+# Provide an encouraging but honest assessment of their progress.
+# """
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             return response.text.strip()
+#         except Exception as e:
+#             return f"Progress analysis temporarily unavailable. Based on your recent sessions, you're making steady progress!"
+
+
+
+
+
+
+
+
+
+
+Interface:
+
+# import streamlit as st
+# import json
+# import time
+# import logging
+# from datetime import datetime
+# from agents.mentor_agent import MentorAgent
+# from agents.code_agent import CodeAgent
+# from agents.evaluation_agent import EvaluationAgent
+# from agents.persona_agent import PersonaAgent
+# from agents.orchestrator import AgentOrchestrator
+# from utils.gemini_client import get_gemini_model
+
+# # Configure logging
+# logging.basicConfig(filename="app.log", level=logging.ERROR, format="%(asctime)s - %(levelname)s - %(message)s")
+
+# # Page configuration
+# st.set_page_config(
+#     page_title="DSA Coach",
+#     layout="wide",
+#     initial_sidebar_state="collapsed"
+# )
+
+# # CSS for LeetCode-like styling
+# st.markdown("""
+# <style>
+#     .main-container {
+#         background: #ffffff;
+#         font-family: 'Inter', sans-serif;
+#     }
+#     .top-nav {
+#         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+#         padding: 15px 20px;
+#         border-radius: 10px;
+#         margin-bottom: 20px;
+#         color: white;
+#         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+#         position: sticky;
+#         top: 0;
+#         z-index: 1000;
+#     }
+#     .problem-card {
+#         background: #f8fafc;
+#         border: 1px solid #e2e8f0;
+#         border-radius: 12px;
+#         padding: 24px;
+#         margin-bottom: 20px;
+#         box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+#         max-height: 70vh;
+#         overflow-y: auto;
+#     }
+#     .problem-title {
+#         font-size: 24px;
+#         font-weight: 700;
+#         color: #1a202c;
+#         margin-bottom: 16px;
+#     }
+#     .difficulty-badge {
+#         padding: 4px 12px;
+#         border-radius: 16px;
+#         font-size: 12px;
+#         font-weight: 600;
+#         text-transform: uppercase;
+#         margin-bottom: 16px;
+#     }
+#     .difficulty-easy { background: #d4edda; color: #155724; }
+#     .difficulty-medium { background: #fff3cd; color: #856404; }
+#     .difficulty-hard { background: #f8d7da; color: #721c24; }
+#     .chat-container {
+#         height: 350px;
+#         overflow-y: auto;
+#         border: 1px solid #e2e8f0;
+#         border-radius: 8px;
+#         padding: 16px;
+#         background: #fafafa;
+#         scroll-behavior: smooth;
+#     }
+#     .chat-message {
+#         margin-bottom: 12px;
+#         padding: 12px;
+#         border-radius: 8px;
+#         max-width: 100%;
+#         word-wrap: break-word;
+#         animation: fadeIn 0.3s ease-in;
+#     }
+#     @keyframes fadeIn {
+#         from { opacity: 0; transform: translateY(10px); }
+#         to { opacity: 1; transform: translateY(0); }
+#     }
+#     .user-message { background: #e3f2fd; border-left: 3px solid #2196f3; color: #1a202c; }
+#     .mentor-message { background: #f3e5f5; border-left: 3px solid #9c27b0; color: #1a202c; }
+#     .agent-message { background: #e8f5e8; border-left: 3px solid #4caf50; color: #1a202c; }
+#     .system-message { background: #fff3e0; border-left: 3px solid #ff9800; color: #1a202c; font-style: italic; }
+#     .code-editor-container {
+#         background: #1e1e1e;
+#         border-radius: 8px;
+#         margin-bottom: 20px;
+#         border: 1px solid #333;
+#         max-height: 500px;
+#         overflow-y: auto;
+#     }
+#     .code-header {
+#         background: #2d2d2d;
+#         padding: 12px 16px;
+#         border-radius: 8px 8px 0 0;
+#         border-bottom: 1px solid #333;
+#         display: flex;
+#         justify-content: space-between;
+#         align-items: center;
+#         position: sticky;
+#         top: 0;
+#         z-index: 10;
+#     }
+#     .status-indicator {
+#         padding: 6px 12px;
+#         border-radius: 20px;
+#         font-size: 12px;
+#         font-weight: 600;
+#         margin-right: 8px;
+#     }
+#     .status-mentoring { background: #fef7e0; color: #92400e; }
+#     .status-coding { background: #e0f2fe; color: #0d47a1; }
+#     .status-evaluation { background: #e8f5e8; color: #2e7d32; }
+#     .status-completed { background: #f3e5f5; color: #7b1fa2; }
+#     .progress-container {
+#         background: #e0e0e0;
+#         border-radius: 10px;
+#         height: 8px;
+#         margin: 10px 0;
+#         overflow: hidden;
+#     }
+#     .progress-bar {
+#         height: 100%;
+#         background: linear-gradient(90deg, #667eea, #764ba2);
+#         border-radius: 10px;
+#         transition: width 0.3s ease;
+#     }
+#     .persona-indicator {
+#         background: rgba(255,255,255,0.2);
+#         border-radius: 8px;
+#         padding: 8px 12px;
+#         font-size: 12px;
+#         backdrop-filter: blur(10px);
+#     }
+#     .chat-container::-webkit-scrollbar {
+#         width: 6px;
+#     }
+#     .chat-container::-webkit-scrollbar-track {
+#         background: #f1f1f1;
+#         border-radius: 3px;
+#     }
+#     .chat-container::-webkit-scrollbar-thumb {
+#         background: #888;
+#         border-radius: 3px;
+#     }
+#     .chat-container::-webkit-scrollbar-thumb:hover {
+#         background: #555;
+#     }
+#     @media (max-width: 768px) {
+#         .top-nav { padding: 10px 15px; }
+#         .problem-card { padding: 16px; }
+#         .chat-container { height: 250px; }
+#     }
+# </style>
+# """, unsafe_allow_html=True)
+
+# # Language templates
+# LANGUAGE_TEMPLATES = {
+#     "Python": """def solution():
+#     # Write your solution here
+#     pass
+
+# if __name__ == "__main__":
+#     pass""",
+#     "Java": """public class Solution {
+#     public void solution() {
+#     }
+    
+#     public static void main(String[] args) {
+#     }
+# }""",
+#     "C++": """#include <iostream>
+# #include <vector>
+# #include <string>
+# using namespace std;
+
+# class Solution {
+# public:
+#     void solution() {
+#     }
+# };
+
+# int main() {
+#     return 0;
+# }""",
+#     "JavaScript": """function solution() {
+# }
+
+# console.log(solution());""",
+#     "Go": """package main
+
+# import "fmt"
+
+# func solution() {
+# }
+
+# func main() {
+# }"""
+# }
+
+# # Load problems
+# @st.cache_data
+# def load_problems():
+#     try:
+#         with open("data/problems.json", "r") as f:
+#             return json.load(f)
+#     except FileNotFoundError:
+#         return [
+#             {
+#                 "title": "Two Sum",
+#                 "difficulty": "Easy",
+#                 "description": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.",
+#                 "examples": [
+#                     {"input": "nums = [2,7,11,15], target = 9", "output": "[0,1]"},
+#                     {"input": "nums = [3,2,4], target = 6", "output": "[1,2]"}
+#                 ]
+#             },
+#             {
+#                 "title": "Reverse Linked List",
+#                 "difficulty": "Easy",
+#                 "description": "Given the head of a singly linked list, reverse the list and return the reversed list.",
+#                 "examples": [
+#                     {"input": "head = [1,2,3,4,5]", "output": "[5,4,3,2,1]"},
+#                     {"input": "head = [1,2]", "output": "[2,1]"}
+#                 ]
+#             },
+#             {
+#                 "title": "Valid Parentheses",
+#                 "difficulty": "Easy",
+#                 "description": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.",
+#                 "examples": [
+#                     {"input": "s = \"()\"", "output": "true"},
+#                     {"input": "s = \"()[]{}\"", "output": "true"},
+#                     {"input": "s = \"(]\"", "output": "false"}
+#                 ]
+#             }
+#         ]
+
+# problems = load_problems()
+
+# # Session state initialization
+# def initialize_session_state():
+#     defaults = {
+#         "orchestrator": AgentOrchestrator(),
+#         "mentor_agent": MentorAgent(),
+#         "code_agent": CodeAgent(),
+#         "evaluation_agent": EvaluationAgent(),
+#         "persona_agent": PersonaAgent(),
+#         "current_problem": problems[0]["title"],
+#         "selected_language": "Python",
+#         "skill_level": None,
+#         "mentor_conversation": [],
+#         "code_conversation": [],
+#         "user_code": LANGUAGE_TEMPLATES["Python"],
+#         "hints_used": 0,
+#         "session_start_time": time.time(),
+#         "approach_approved": False,
+#         "last_activity": time.time(),
+#         "max_chat_messages": 20
+#     }
+    
+#     for key, value in defaults.items():
+#         if key not in st.session_state:
+#             st.session_state[key] = value
+
+# initialize_session_state()
+
+# # Top navigation
+# def render_top_nav():
+#     problem_titles = [p["title"] for p in problems]
+    
+#     with st.container():
+#         st.markdown('<div class="top-nav">', unsafe_allow_html=True)
+        
+#         col1, col2, col3, col4, col5 = st.columns([3, 2, 2, 2, 1])
+        
+#         with col1:
+#             st.markdown("### 🧠 DSA Coach")
+#             active_agent = st.session_state.orchestrator.get_active_agent()
+#             st.markdown(f'<div class="persona-indicator">🤖 Active: {active_agent}</div>', unsafe_allow_html=True)
+        
+#         with col2:
+#             selected_title = st.selectbox(
+#                 "Problem:",
+#                 problem_titles,
+#                 index=problem_titles.index(st.session_state.current_problem),
+#                 key="problem_selector",
+#                 label_visibility="collapsed"
+#             )
+            
+#             if st.session_state.current_problem != selected_title:
+#                 reset_session(selected_title)
+        
+#         with col3:
+#             selected_lang = st.selectbox(
+#                 "Language:",
+#                 list(LANGUAGE_TEMPLATES.keys()),
+#                 index=list(LANGUAGE_TEMPLATES.keys()).index(st.session_state.selected_language),
+#                 key="lang_selector",
+#                 label_visibility="collapsed"
+#             )
+            
+#             if st.session_state.selected_language != selected_lang:
+#                 st.session_state.selected_language = selected_lang
+#                 if not st.session_state.user_code.strip():
+#                     st.session_state.user_code = LANGUAGE_TEMPLATES[selected_lang]
+        
+#         with col4:
+#             current_state = st.session_state.orchestrator.get_current_state()
+#             progress = st.session_state.orchestrator.get_progress_summary()
+#             status_class = f"status-{current_state.lower()}"
+            
+#             st.markdown(f'<span class="status-indicator {status_class}">📍 {current_state.title()}</span>',
+#                        unsafe_allow_html=True)
+            
+#             progress_pct = progress.get("progress_percentage", 0)
+#             st.markdown(f"""
+#             <div class="progress-container">
+#                 <div class="progress-bar" style="width: {progress_pct}%"></div>
+#             </div>
+#             <div style="font-size: 10px; color: rgba(255,255,255,0.8);">Progress: {progress_pct}%</div>
+#             """, unsafe_allow_html=True)
+        
+#         with col5:
+#             if st.session_state.skill_level:
+#                 skill_colors = {"Beginner": "#ff9800", "Intermediate": "#2196f3", "Advanced": "#4caf50"}
+#                 color = skill_colors.get(st.session_state.skill_level, "#666")
+#                 st.markdown(f"""
+#                 <div style="background:{color};color:white;padding:4px 8px;border-radius:12px;font-size:11px;font-weight:600;margin-bottom:4px;">
+#                     🎯 {st.session_state.skill_level}
+#                 </div>
+#                 <div style="font-size:9px;color:rgba(255,255,255,0.8);text-align:center;">
+#                     Hints: {st.session_state.hints_used}
+#                 </div>
+#                 """, unsafe_allow_html=True)
+#             else:
+#                 st.markdown('<span style="background:#666;color:white;padding:4px 8px;border-radius:12px;font-size:11px;font-weight:600;">🎯 Detecting...</span>',
+#                            unsafe_allow_html=True)
+        
+#         st.markdown('</div>', unsafe_allow_html=True)
+
+# def reset_session(selected_title):
+#     st.session_state.current_problem = selected_title
+#     st.session_state.orchestrator.reset()
+#     st.session_state.mentor_conversation = []
+#     st.session_state.code_conversation = []
+#     st.session_state.user_code = LANGUAGE_TEMPLATES[st.session_state.selected_language]
+#     st.session_state.approach_approved = False
+#     st.session_state.skill_level = None
+#     st.session_state.hints_used = 0
+#     st.session_state.session_start_time = time.time()
+#     st.session_state.last_activity = time.time()
+    
+#     st.session_state.orchestrator.log_user_interaction("session_reset", {
+#         "problem": selected_title,
+#         "language": st.session_state.selected_language
+#     })
+
+# def manage_chat_history(conversation_list, max_messages=20):
+#     if len(conversation_list) > max_messages:
+#         return [conversation_list[0]] + conversation_list[-(max_messages-1):]
+#     return conversation_list
+
+# def render_problem_panel():
+#     selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+    
+#     difficulty_class = f"difficulty-{selected_problem['difficulty'].lower()}"
+    
+#     st.markdown(f"""
+#     <div class="problem-card">
+#         <div class="problem-title">{selected_problem['title']}</div>
+#         <div class="difficulty-badge {difficulty_class}">{selected_problem['difficulty']}</div>
+#         <div class="problem-description">{selected_problem['description']}</div>
+#     """, unsafe_allow_html=True)
+    
+#     if "examples" in selected_problem and selected_problem["examples"]:
+#         st.markdown("### 📋 Examples")
+#         for i, example in enumerate(selected_problem["examples"], 1):
+#             st.markdown(f"""
+#             <div style="background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin: 8px 0;">
+#                 <div style="font-weight: 600; color: #2d3748; margin-bottom: 8px;">Example {i}:</div>
+#                 <div style="background: #2d3748; color: #e2e8f0; padding: 6px 10px; border-radius: 4px; font-family: monospace; margin: 4px 0;">
+#                     Input: {example['input']}
+#                 </div>
+#                 <div style="background: #2d3748; color: #2e8f0; padding: 6px 10px; border-radius: 4px; font-family: monospace; margin: 4px 0;">
+#                     Output: {example['output']}
+#                 </div>
+#             </div>
+#             """, unsafe_allow_html=True)
+    
+#     st.markdown('</div>', unsafe_allow_html=True)
+
+# def render_mentor_panel():
+#     st.markdown("### 🧠 Approach Discussion")
+    
+#     if st.session_state.skill_level:
+#         persona_profile = st.session_state.persona_agent.get_user_profile(
+#             st.session_state.skill_level,
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+#         if persona_profile.get("persona_message"):
+#             st.info(f"💡 {persona_profile['persona_message']}")
+    
+#     if st.session_state.mentor_conversation:
+#         st.markdown('<div class="chat-container" id="mentor-chat">', unsafe_allow_html=True)
+        
+#         managed_conversation = manage_chat_history(st.session_state.mentor_conversation)
+        
+#         for msg in managed_conversation:
+#             timestamp = datetime.now().strftime("%H:%M")
+#             msg_class = "user-message" if msg["role"] == "user" else "mentor-message"
+#             role_emoji = "🧑" if msg["role"] == "user" else "🤖"
+#             role_name = "You" if msg["role"] == "user" else "AI Mentor"
+            
+#             st.markdown(f"""
+#             <div class="chat-message {msg_class}">
+#                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+#                     <strong>{role_emoji} {role_name}</strong>
+#                     <span style="font-size: 10px; color: #666;">{timestamp}</span>
+#                 </div>
+#                 <div>{msg['content']}</div>
+#             </div>
+#             """, unsafe_allow_html=True)
+        
+#         st.markdown('</div>', unsafe_allow_html=True)
+        
+#         st.markdown("""
+#         <script>
+#         const chatContainer = document.getElementById('mentor-chat');
+#         if (chatContainer) {
+#             chatContainer.scrollTop = chatContainer.scrollHeight;
+#         }
+#         </script>
+#         """, unsafe_allow_html=True)
+    
+#     st.markdown("### 💭 Describe Your Approach")
+#     user_input = st.text_area(
+#         "How would you solve this problem?",
+#         height=120,
+#         placeholder="Think step by step...",
+#         key="mentor_input"
+#     )
+    
+#     col1, col2, col3 = st.columns(3)
+    
+#     with col1:
+#         if st.button("💬 Submit Approach", type="primary", use_container_width=True):
+#             if user_input.strip():
+#                 process_mentor_input(user_input)
+    
+#     with col2:
+#         if st.button("💡 Get Hint", use_container_width=True):
+#             get_hint()
+    
+#     with col3:
+#         if st.button("📊 Skip to Coding", use_container_width=True):
+#             if st.session_state.orchestrator.can_transition_to("coding"):
+#                 st.session_state.orchestrator.transition_to_coding()
+#                 st.rerun()
+#             else:
+#                 st.error("❌ Discuss your approach first!")
+    
+#     if st.session_state.approach_approved:
+#         st.success("✅ Excellent approach! Ready to code.")
+#         next_action = st.session_state.orchestrator.get_next_recommended_action()
+#         st.info(f"🎯 **Next:** {next_action}")
+        
+#         col1, col2 = st.columns(2)
+#         with col1:
+#             if st.button("🚀 Start Coding", type="primary", use_container_width=True):
+#                 st.session_state.orchestrator.transition_to_coding()
+#                 st.rerun()
+#         with col2:
+#             if st.button("📊 Skip to Evaluation", use_container_width=True):
+#                 st.session_state.orchestrator.transition_to_evaluation()
+#                 st.rerun()
+
+# def render_code_panel():
+#     st.markdown("### 💻 Code Implementation")
+    
+#     st.markdown(f"""
+#     <div class="code-editor-container">
+#         <div class="code-header">
+#             <span style="color: #ffffff; font-weight: 600;">Solution.{st.session_state.selected_language.lower()}</span>
+#             <div>
+#                 <span style="color: #888; font-size: 12px;">💡 Hints: {st.session_state.hints_used}</span>
+#                 <span style="color: #888; font-size: 12px; margin-left: 10px;">⏱️ {int((time.time() - st.session_state.session_start_time) / 60)}min</span>
+#             </div>
+#         </div>
+#     </div>
+#     """, unsafe_allow_html=True)
+    
+#     user_code = st.text_area(
+#         "",
+#         value=st.session_state.user_code,
+#         height=400,
+#         key="code_editor",
+#         label_visibility="collapsed"
+#     )
+#     st.session_state.user_code = user_code
+    
+#     col1, col2, col3, col4 = st.columns(4)
+    
+#     with col1:
+#         if st.button("🧪 Run & Test", type="primary", use_container_width=True):
+#             test_code()
+    
+#     with col2:
+#         if st.button("🔄 Back to Discussion", use_container_width=True):
+#             if st.session_state.orchestrator.transition_to_mentoring():
+#                 st.session_state.approach_approved = False
+#                 st.rerun()
+    
+#     with col3:
+#         if st.button("📊 Get Evaluation", use_container_width=True):
+#             if st.session_state.orchestrator.transition_to_evaluation():
+#                 st.rerun()
+    
+#     with col4:
+#         if st.button("🔄 Reset Code", use_container_width=True):
+#             st.session_state.user_code = LANGUAGE_TEMPLATES[st.session_state.selected_language]
+#             st.rerun()
+    
+#     st.markdown("### 🤖 Code Assistant")
+#     code_question = st.text_input(
+#         "Ask about your code, optimizations, or debugging:",
+#         placeholder="e.g., How can I optimize this solution?",
+#         key="code_question"
+#     )
+    
+#     if st.button("💬 Ask Assistant") and code_question:
+#         process_code_question(code_question)
+    
+#     if st.session_state.code_conversation:
+#         st.markdown("### 💬 Discussion History")
+#         st.markdown('<div class="chat-container" id="code-chat">', unsafe_allow_html=True)
+        
+#         managed_conversation = manage_chat_history(st.session_state.code_conversation)
+        
+#         for msg in managed_conversation:
+#             timestamp = datetime.now().strftime("%H:%M")
+#             if msg["role"] == "user":
+#                 st.markdown(f"""
+#                 <div class="chat-message user-message">
+#                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+#                         <strong>🧑 You</strong>
+#                         <span style="font-size: 10px; color: #666;">{timestamp}</span>
+#                     </div>
+#                     <div>{msg['content']}</div>
+#                 </div>
+#                 """, unsafe_allow_html=True)
+#             elif msg["role"] == "code_agent":
+#                 st.markdown(f"""
+#                 <div class="chat-message agent-message">
+#                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+#                         <strong>🤖 Code Assistant</strong>
+#                         <span style="font-size: 10px; color: #666;">{timestamp}</span>
+#                     </div>
+#                     <div>{msg['content']}</div>
+#                 </div>
+#                 """, unsafe_allow_html=True)
+#             else:
+#                 st.markdown(f"""
+#                 <div class="chat-message system-message">
+#                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+#                         <strong>🔍 System</strong>
+#                         <span style="font-size: 10px; color: #666;">{timestamp}</span>
+#                     </div>
+#                     <div>{msg['content']}</div>
+#                 </div>
+#                 """, unsafe_allow_html=True)
+        
+#         st.markdown('</div>', unsafe_allow_html=True)
+
+# def render_evaluation_panel():
+#     st.markdown("### 📊 Performance Evaluation")
+    
+#     with st.spinner("🤖 Generating evaluation..."):
+#         selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+        
+#         session_analytics = st.session_state.orchestrator.get_session_analytics()
+        
+#         persona_summary = st.session_state.persona_agent.get_session_summary(
+#             session_analytics,
+#             st.session_state.skill_level or "Intermediate"
+#         )
+        
+#         evaluation = st.session_state.evaluation_agent.generate_evaluation(
+#             skill_level=st.session_state.skill_level or "Intermediate",
+#             hints_used=st.session_state.hints_used,
+#             final_code=st.session_state.user_code,
+#             problem=selected_problem,
+#             conversation_history=st.session_state.mentor_conversation + st.session_state.code_conversation
+#         )
+        
+#         st.markdown("#### 🎯 Performance Summary")
+#         col1, col2, col3 = st.columns(3)
+#         with col1:
+#             st.metric("Time Spent", f"{int(session_analytics.get('total_duration', 0) / 60)}min")
+#         with col2:
+#             st.metric("Hints Used", st.session_state.hints_used)
+#         with col3:
+#             st.metric("Interactions", session_analytics.get('user_interactions', 0))
+        
+#         st.info(evaluation["summary"])
+        
+#         st.markdown("#### 🧠 Personalized Insights")
+#         for insight in persona_summary.get("insights", []):
+#             st.success(f"✅ {insight}")
+        
+#         st.markdown("#### 🔍 Detailed Analysis")
+#         st.markdown(evaluation["detailed_analysis"])
+        
+#         st.markdown("#### 🚀 Next Steps")
+#         st.markdown(evaluation["recommendations"])
+        
+#         st.markdown("#### 📈 Session Analytics")
+#         st.write(f"**Total Duration**: {int(session_analytics.get('total_duration', 0) / 60)} minutes")
+#         st.write(f"**States Visited**: {session_analytics.get('states_visited', '')}")
+#         st.write(f"**Total Transitions**: {session_analytics.get('total_transitions', 0)}")
+#         st.write(f"**Interaction Frequency**: {session_analytics.get('interaction_frequency', 0):.2f} interactions/min")
+        
+#         st.markdown("##### ⏱️ Time Distribution")
+#         for state, duration in session_analytics.get('time_per_state', {}).items():
+#             st.write(f"{state.title()}: {int(duration / 60)} min {int(duration % 60)} sec")
+        
+#         st.markdown("#### 🎯 Next Difficulty")
+#         difficulty_rec = st.session_state.persona_agent.get_difficulty_adjustment(
+#             st.session_state.skill_level or "Intermediate",
+#             [session_analytics]
+#         )
+#         st.info(f"Recommended: **{difficulty_rec}** the difficulty level.")
+        
+#         col1, col2, col3 = st.columns(3)
+#         with col1:
+#             if st.button("🔄 Try Another Problem", type="primary", use_container_width=True):
+#                 st.session_state.orchestrator.complete_session()
+#                 reset_session(problems[0]["title"])
+#                 st.rerun()
+#         with col2:
+#             if st.button("💻 Back to Coding", use_container_width=True):
+#                 if st.session_state.orchestrator.transition_to_coding():
+#                     st.rerun()
+#         with col3:
+#             if st.button("🧠 Back to Discussion", use_container_width=True):
+#                 if st.session_state.orchestrator.transition_to_mentoring():
+#                     st.rerun()
+
+# def process_mentor_input(user_input):
+#     try:
+#         selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+        
+#         st.session_state.orchestrator.log_user_interaction("approach_submitted", {
+#             "input": user_input,
+#             "problem": st.session_state.current_problem
+#         })
+        
+#         st.session_state.persona_agent.update_performance_indicators(
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+        
+#         response = st.session_state.mentor_agent.analyze_approach(
+#             user_input=user_input,
+#             problem=selected_problem,
+#             current_skill_level=st.session_state.skill_level or "Intermediate"
+#         )
+        
+#         st.session_state.mentor_conversation.append({"role": "user", "content": user_input})
+#         st.session_state.mentor_conversation.append({"role": "mentor", "content": response["message"]})
+        
+#         if response.get("skill_level") and not st.session_state.skill_level:
+#             st.session_state.skill_level = response["skill_level"]
+        
+#         st.session_state.approach_approved = response.get("approved", False)
+        
+#         persona_profile = st.session_state.persona_agent.get_user_profile(
+#             st.session_state.skill_level or "Intermediate",
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+#         if persona_profile.get("motivation_message"):
+#             st.session_state.mentor_conversation.append({
+#                 "role": "mentor",
+#                 "content": persona_profile["motivation_message"]
+#             })
+        
+#         if st.session_state.orchestrator.get_hint_suggestions():
+#             hint = st.session_state.mentor_agent.give_hint(
+#                 skill_level=st.session_state.skill_level or "Intermediate",
+#                 problem=selected_problem
+#             )
+#             st.session_state.mentor_conversation.append({"role": "mentor", "content": f"💡 Hint: {hint}"})
+#             st.session_state.hints_used += 1
+#             st.session_state.orchestrator.log_user_interaction("hint_provided", {"hint": hint})
+        
+#         st.session_state.mentor_conversation = manage_chat_history(st.session_state.mentor_conversation)
+#         st.rerun()
+#     except Exception as e:
+#         logging.error(f"Mentor input processing failed: {e}")
+#         st.error("Error processing approach. Please try again.")
+#         st.session_state.mentor_conversation.append({
+#             "role": "system",
+#             "content": "⚠️ Sorry, something went wrong. Please try again."
+#         })
+
+# def get_hint():
+#     try:
+#         selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+        
+#         st.session_state.persona_agent.update_performance_indicators(
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+        
+#         hint = st.session_state.mentor_agent.give_hint(
+#             skill_level=st.session_state.skill_level or "Intermediate",
+#             problem=selected_problem
+#         )
+        
+#         st.session_state.mentor_conversation.append({
+#             "role": "mentor",
+#             "content": f"💡 Hint: {hint}"
+#         })
+        
+#         st.session_state.hints_used += 1
+#         st.session_state.orchestrator.log_user_interaction("hint_requested", {
+#             "hint_count": st.session_state.hints_used,
+#             "problem": st.session_state.current_problem
+#         })
+        
+#         st.session_state.mentor_conversation = manage_chat_history(st.session_state.mentor_conversation)
+#         st.rerun()
+#     except Exception as e:
+#         logging.error(f"Hint generation failed: {e}")
+#         st.error("Error generating hint. Please try again.")
+
+# def test_code():
+#     try:
+#         selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+        
+#         st.session_state.orchestrator.log_user_interaction("code_submitted", {
+#             "code": st.session_state.user_code,
+#             "language": st.session_state.selected_language
+#         })
+        
+#         st.session_state.persona_agent.update_performance_indicators(
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+        
+#         result = st.session_state.code_agent.evaluate_code(
+#             user_code=st.session_state.user_code,
+#             problem=selected_problem,
+#             skill_level=st.session_state.skill_level or "Intermediate"
+#         )
+        
+#         st.session_state.code_conversation.append({
+#             "role": "user",
+#             "content": "Submitted code for testing"
+#         })
+#         st.session_state.code_conversation.append({
+#             "role": "code_agent",
+#             "content": result["feedback"]
+#         })
+        
+#         test_cases = st.session_state.code_agent.suggest_test_cases(
+#             problem=selected_problem,
+#             user_code=st.session_state.user_code
+#         )
+#         if test_cases:
+#             st.session_state.code_conversation.append({
+#                 "role": "system",
+#                 "content": "**Test Cases:**\n" + "\n".join([f"Test {i+1}: Input: {tc['input']}, Expected: {tc['expected_output']}" for i, tc in enumerate(test_cases)])
+#             })
+        
+#         if not result["passed"]:
+#             encouragement = st.session_state.persona_agent.generate_encouragement_message(
+#                 context="multiple_attempts",
+#                 skill_level=st.session_state.skill_level or "Intermediate"
+#             )
+#             st.session_state.code_conversation.append({
+#                 "role": "code_agent",
+#                 "content": encouragement + "\nConsider discussing your approach again."
+#             })
+        
+#         st.session_state.orchestrator.log_user_interaction("test_result", {
+#             "passed": result["passed"],
+#             "bugs": result.get("bugs", [])
+#         })
+        
+#         st.session_state.code_conversation = manage_chat_history(st.session_state.code_conversation)
+#         st.rerun()
+#     except Exception as e:
+#         logging.error(f"Code testing failed: {e}")
+#         st.error("Failed to test code. Please check and try again.")
+#         st.session_state.code_conversation.append({
+#             "role": "system",
+#             "content": "⚠️ Error testing code."
+#         })
+
+# def process_code_question(question):
+#     try:
+#         selected_problem = next(p for p in problems if p["title"] == st.session_state.current_problem)
+        
+#         st.session_state.orchestrator.log_user_interaction("code_question", {
+#             "question": question,
+#             "problem": st.session_state.current_problem
+#         })
+        
+#         st.session_state.persona_agent.update_performance_indicators(
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+        
+#         persona_profile = st.session_state.persona_agent.get_user_profile(
+#             st.session_state.skill_level or "Intermediate",
+#             st.session_state.orchestrator.get_session_analytics()
+#         )
+        
+#         response = st.session_state.code_agent.chat_assistance(
+#             user_question=question,
+#             user_code=st.session_state.user_code,
+#             problem=selected_problem,
+#             skill_level=st.session_state.skill_level or "Intermediate"
+#         )
+        
+#         st.session_state.code_conversation.append({
+#             "role": "user",
+#             "content": question
+#         })
+#         st.session_state.code_conversation.append({
+#             "role": "code_agent",
+#             "content": response
+#         })
+        
+#         encouragement = st.session_state.persona_agent.generate_encouragement_message(
+#             context="hint_request",
+#             skill_level=st.session_state.skill_level or "Intermediate"
+#         )
+#         st.session_state.code_conversation.append({
+#             "role": "code_agent",
+#             "content": encouragement
+#         })
+        
+#         st.session_state.code_conversation = manage_chat_history(st.session_state.code_conversation)
+#         st.rerun()
+#     except Exception as e:
+#         logging.error(f"Code question processing failed: {e}")
+#         st.error("Error answering question. Please try again.")
+#         st.session_state.code_conversation.append({
+#             "role": "system",
+#             "content": "⚠️ Error processing question."
+#         })
+
+# def render_app():
+#     render_top_nav()
+    
+#     get_gemini_model()
+    
+#     if not st.session_state.skill_level:
+#         st.markdown("### 🎓 Select Your Skill Level")
+#         col1, col2, col3 = st.columns(3)
+#         with col1:
+#             if st.button("Beginner", use_container_width=True):
+#                 st.session_state.skill_level = "Beginner"
+#                 st.session_state.orchestrator.log_user_interaction("skill_level_selected", {"level": "Beginner"})
+#                 st.rerun()
+#         with col2:
+#             if st.button("Intermediate", use_container_width=True):
+#                 st.session_state.skill_level = "Intermediate"
+#                 st.session_state.orchestrator.log_user_interaction("skill_level_selected", {"level": "Intermediate"})
+#                 st.rerun()
+#         with col3:
+#             if st.button("Advanced", use_container_width=True):
+#                 st.session_state.skill_level = "Advanced"
+#                 st.session_state.orchestrator.log_user_interaction("skill_level_selected", {"level": "Advanced"})
+#                 st.rerun()
+#         return
+    
+#     col1, col2 = st.columns([1, 1])
+    
+#     with col1:
+#         render_problem_panel()
+    
+#     with col2:
+#         current_state = st.session_state.orchestrator.get_current_state()
+#         if current_state == "mentoring":
+#             render_mentor_panel()
+#         elif current_state == "coding":
+#             render_code_panel()
+#         elif current_state == "evaluation":
+#             render_evaluation_panel()
+
+# if __name__ == "__main__":
+#     render_app()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MENTOR Agent...........
+
+# from utils.gemini_client import get_gemini_model
+# import json
+# import re
+
+# class MentorAgent:
+#     def __init__(self):
+#         self.model = get_gemini_model()
+#         self.conversation_history = []
+    
+#     def analyze_approach(self, user_input: str, problem: dict, current_skill_level: str = None) -> dict:
+#         """
+#         Analyzes user's approach and determines if they're ready to code
+#         Returns: {
+#             "message": str,
+#             "skill_level": str,
+#             "approved": bool,
+#             "hint": str (optional)
+#         }
+#         """
+        
+#         prompt = f"""
+# You are an expert DSA mentor with 10+ years of experience. Your job is to ensure students think through their approach COMPLETELY before coding.
+
+# PROBLEM DETAILS:
+# Title: {problem['title']} 
+# Difficulty: {problem['difficulty']}
+# Description: {problem['description']}
+
+# STUDENT DETAILS:
+# Current skill level: {current_skill_level or "Unknown - assess from approach"}
+# Student's approach: "{user_input}"
+
+# STRICT EVALUATION RULES:
+# You must REJECT approaches that are incomplete or vague. Only approve when the student demonstrates COMPLETE understanding.
+
+# REQUIRED FOR APPROVAL - ALL MUST BE PRESENT:
+# 1. ALGORITHM STEPS: Must explain the step-by-step process from start to finish
+# 2. DATA STRUCTURES: Must explain what data structures are used and why
+# 3. CONTROL FLOW: Must explain loops, conditions, recursion details (ranges, base cases, etc.)
+# 4. LOGIC/OPERATIONS: Must explain what calculations, comparisons, or operations are performed
+# 5. OUTPUT/RETURN: Must explain what is returned/output and under what conditions
+
+# AUTOMATIC REJECTION EXAMPLES (VAGUE APPROACHES):
+# ❌ "Use loops" → Missing: what type of loops? what do they iterate over? what logic inside?
+# ❌ "Use recursion" → Missing: base case? recursive call? what parameters?
+# ❌ "Use stack/queue" → Missing: what gets pushed/popped? when? what's the algorithm?
+# ❌ "Use dynamic programming" → Missing: what's the DP state? transition? base cases?
+# ❌ "Use BFS/DFS" → Missing: what's the graph structure? what are we searching for?
+# ❌ "Sort the array" → Missing: what happens after sorting? complete algorithm?
+# ❌ "Use two pointers" → Missing: where do pointers start? how do they move? what condition?
+# ❌ "Use sliding window" → Missing: window size? what's in window? when to expand/contract?
+
+# APPROVAL EXAMPLES (COMPLETE APPROACHES):
+# ✅ Arrays: "Use two nested loops: outer from 0 to n-2, inner from i+1 to n-1, check condition X, return Y when found"
+# ✅ Trees: "Use DFS recursion: base case is null node, for each node process value, recursively call left and right subtrees, return combined result"
+# ✅ Graphs: "Use BFS with queue: start from source, add neighbors to queue, track visited nodes, continue until queue empty or target found"
+# ✅ DP: "Use 2D DP table: dp[i][j] represents X, base case dp[0][0] = Y, transition dp[i][j] = dp[i-1][j] + dp[i][j-1], return dp[n][m]"
+
+# SKILL LEVEL ASSESSMENT:
+# - Beginner: Basic understanding, mentions simple approaches, may miss details
+# - Intermediate: Knows data structures and algorithms, mentions complexity, good structure
+# - Advanced: Optimal solutions, edge cases, detailed analysis, pattern recognition
+
+# RESPONSE REQUIREMENTS:
+# - If INCOMPLETE: Ask for specific missing details relevant to the problem type
+# - If VAGUE: Request step-by-step explanation of the algorithm
+# - If WRONG: Gently correct and guide toward correct approach
+# - If COMPLETE: Approve with encouragement and readiness confirmation
+
+# RESPONSE FORMAT (JSON):
+# {{
+#     "skill_level": "Beginner|Intermediate|Advanced",
+#     "approved": true/false,
+#     "message": "Your response asking for specific missing details or approving",
+#     "reasoning": "What's missing or why approved",
+#     "hint": "Specific hint about what details to add"
+# }}
+
+# IMPORTANT: Be encouraging but DEMANDING. Students must think through their approach completely before coding. Adapt your questions to the specific problem type (array, tree, graph, DP, etc.).
+# """
+
+#         try:
+#             response = self.model.generate_content(prompt)
+#             response_text = response.text.strip()
+            
+#             # Clean up the response to extract JSON
+#             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+#             if json_match:
+#                 json_response = json.loads(json_match.group())
+                
+#                 # Personalize message based on skill level
+#                 personalized_message = self._personalize_message(
+#                     json_response["message"], 
+#                     json_response["skill_level"]
+#                 )
+#                 json_response["message"] = personalized_message
+                
+#                 return json_response
+#             else:
+#                 raise ValueError("No JSON found in response")
+                
+#         except Exception as e:
+#             print(f"[Mentor Agent Error] {e}")
+#             return {
+#                 "skill_level": current_skill_level or "Intermediate",
+#                 "approved": False,
+#                 "message": "I need a bit more detail about your approach. Can you explain your thinking step by step?",
+#                 "reasoning": "Error in processing",
+#                 "hint": "Try breaking down the problem into smaller parts."
+#             }
+    
+#     def give_hint(self, skill_level: str, problem: dict) -> str:
+#         """Provides skill-appropriate hints"""
+        
+#         hint_prompts = {
+#             "Beginner": f"""
+# You are helping a BEGINNER student with this DSA problem. Give them a helpful hint that guides them toward the solution without giving it away.
+
+# Problem: {problem['title']} ({problem['difficulty']})
+# Description: {problem['description']}
+
+# BEGINNER HINT GUIDELINES:
+# - Focus on the most basic approach (brute force is often okay)
+# - Mention what data structures or algorithms they might need
+# - Give them the first step or general direction
+# - Use simple language and avoid complex terms
+# - Be encouraging and supportive
+# - Ask guiding questions to help them think
+
+# HINT APPROACH BY PROBLEM TYPE:
+# - Arrays: "Think about how to check all possibilities..." or "What if you used loops to..."
+# - Trees: "Consider traversing the tree..." or "Think about recursive solutions..."
+# - Graphs: "Think about exploring connected nodes..." or "Consider BFS/DFS..."
+# - Strings: "Think about comparing characters..." or "Consider string properties..."
+# - Dynamic Programming: "Think about breaking into smaller subproblems..."
+# - Sorting/Searching: "Consider sorting first..." or "Think about binary search..."
+
+# HINT STRUCTURE:
+# 1. Start with encouragement
+# 2. Give a concrete first step or approach direction
+# 3. Mention what to think about next
+# 4. End with a guiding question
+
+# Keep the hint to 2-3 sentences and include an emoji for encouragement.
+# """,
+            
+#             "Intermediate": f"""
+# You are helping an INTERMEDIATE student with this DSA problem. They understand basic data structures but might need guidance on optimization.
+
+# Problem: {problem['title']} ({problem['difficulty']})
+# Description: {problem['description']}
+
+# INTERMEDIATE HINT GUIDELINES:
+# - Assume they know basic data structures (arrays, hashmaps, trees, etc.)
+# - Guide them toward more efficient solutions
+# - Mention time/space complexity considerations
+# - Help them recognize common patterns
+# - Encourage them to think about edge cases
+
+# HINT APPROACH BY PROBLEM TYPE:
+# - Arrays: "Can you optimize using extra space?" or "Consider the sorted property..."
+# - Trees: "Think about tree traversal patterns..." or "Consider the tree properties..."
+# - Graphs: "What's the optimal traversal strategy?" or "Consider shortest path algorithms..."
+# - Strings: "Think about string matching patterns..." or "Consider preprocessing..."
+# - Dynamic Programming: "What's the optimal substructure?" or "Consider memoization..."
+# - Sorting/Searching: "Can you achieve better than O(n²)?" or "Think about divide and conquer..."
+
+# HINT STRUCTURE:
+# 1. Acknowledge their current understanding level
+# 2. Point toward optimization opportunities
+# 3. Mention complexity or pattern recognition
+# 4. Ask them to consider specific scenarios
+
+# Keep the hint to 2-3 sentences with practical guidance.
+# """,
+            
+#             "Advanced": f"""
+# You are helping an ADVANCED student with this DSA problem. They understand complex algorithms but might need insights into optimal solutions or edge cases.
+
+# Problem: {problem['title']} ({problem['difficulty']})
+# Description: {problem['description']}
+
+# ADVANCED HINT GUIDELINES:
+# - Assume strong algorithmic knowledge
+# - Focus on optimal solutions and trade-offs
+# - Highlight subtle edge cases or constraints
+# - Discuss proof of correctness if relevant
+# - Challenge them to think about the most efficient approach
+
+# HINT APPROACH BY PROBLEM TYPE:
+# - Arrays: "Consider mathematical properties..." or "Think about invariants..."
+# - Trees: "Consider tree properties like height/balance..." or "Think about optimal tree algorithms..."
+# - Graphs: "What's the optimal complexity for this graph problem?" or "Consider advanced graph algorithms..."
+# - Strings: "Think about string algorithms like KMP..." or "Consider suffix structures..."
+# - Dynamic Programming: "What's the optimal space complexity?" or "Consider state compression..."
+# - Sorting/Searching: "Can you achieve optimal bounds?" or "Think about lower bounds..."
+
+# HINT STRUCTURE:
+# 1. Acknowledge their analytical approach
+# 2. Point toward optimal complexity or advanced techniques
+# 3. Mention edge cases or mathematical insights
+# 4. Challenge them with a deeper question
+
+# Keep the hint to 2-3 sentences with technical depth.
+# """
+#         }
+        
+#         prompt = hint_prompts.get(skill_level, hint_prompts["Intermediate"])
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             return response.text.strip()
+#         except Exception as e:
+#             fallback_hints = {
+#                 "Beginner": "Think about what data structure could help you look up values quickly. 🤔",
+#                 "Intermediate": "Consider the time complexity - can you reduce it using additional space?",
+#                 "Advanced": "What edge cases might break your current approach? How would you handle them?"
+#             }
+#             return fallback_hints.get(skill_level, "Keep thinking - you're on the right track!")
+    
+#     def _personalize_message(self, message: str, skill_level: str) -> str:
+#         """Add personality based on skill level"""
+        
+#         personality_prefixes = {
+#             "Beginner": "🌟 Great start! ",
+#             "Intermediate": "👍 Nice thinking! ",
+#             "Advanced": "💡 Excellent analysis! "
+#         }
+        
+#         personality_suffixes = {
+#             "Beginner": " Remember, every expert was once a beginner! 🚀",
+#             "Intermediate": " You're developing strong problem-solving skills! 💪",
+#             "Advanced": " Your systematic approach is impressive! 🎯"
+#         }
+        
+#         prefix = personality_prefixes.get(skill_level, "")
+#         suffix = personality_suffixes.get(skill_level, "")
+        
+#         return f"{prefix}{message}{suffix}"
+    
+#     def get_encouragement(self, skill_level: str, hints_used: int) -> str:
+#         """Provides encouragement based on performance"""
+        
+#         if hints_used == 0:
+#             messages = {
+#                 "Beginner": "Wow! You figured that out on your own! 🌟",
+#                 "Intermediate": "Excellent independent thinking! 🎯",
+#                 "Advanced": "Outstanding problem-solving skills! 🏆"
+#             }
+#         elif hints_used <= 2:
+#             messages = {
+#                 "Beginner": "Great job using hints effectively! 👍",
+#                 "Intermediate": "Good balance of independent work and guidance! 💪",
+#                 "Advanced": "Smart use of hints to validate your thinking! 🧠"
+#             }
+#         else:
+#             messages = {
+#                 "Beginner": "Don't worry - learning takes practice! Keep going! 🚀",
+#                 "Intermediate": "Challenging problems require patience. You're learning! 📚",
+#                 "Advanced": "Even experts need different perspectives sometimes! 🤝"
+#             }
+        
+#         return messages.get(skill_level, "Keep up the great work!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from utils.gemini_client import get_gemini_model
+# import json
+# import re
+
+# class MentorAgent:
+#     def __init__(self):
+#         self.model = get_gemini_model()
+#         self.conversation_history = []
+    
+#     def analyze_approach(self, user_input: str, problem: dict, current_skill_level: str = None) -> dict:
+#         """
+#         Analyzes user's approach and determines if they're ready to code
+#         Returns: {
+#             "message": str,
+#             "skill_level": str,
+#             "approved": bool,
+#             "hint": str (optional)
+#         }
+#         """
+        
+#         prompt = f"""
+# You are an expert DSA mentor helping a student solve coding problems. Your role is to:
+# 1. Assess their problem-solving approach
+# 2. Determine their skill level if not already known
+# 3. Decide if their approach is solid enough to proceed to coding
+# 4. Provide encouraging, level-appropriate feedback
+
+# Problem: {problem['title']} ({problem['difficulty']})
+# Description: {problem['description']}
+
+# Current skill level: {current_skill_level or "Unknown"}
+
+# Student's approach description:
+# \"{user_input}\"
+
+# Based on their approach, respond in JSON format:
+# {{
+#     "skill_level": "Beginner|Intermediate|Advanced",
+#     "approved": true/false,
+#     "message": "Your encouraging response with feedback",
+#     "reasoning": "Why you made this decision",
+#     "hint": "Optional hint if they need guidance"
+# }}
+
+# Skill level guidelines:
+# - Beginner: Basic understanding, mentions brute force, may miss edge cases
+# - Intermediate: Knows data structures, mentions time complexity, some optimization ideas
+# - Advanced: Identifies optimal patterns, considers space-time tradeoffs, edge cases
+
+# Approval guidelines:
+# - Approve if they show understanding of a viable approach (even if not optimal)
+# - Don't approve if approach is fundamentally wrong or too vague
+# - Always be encouraging regardless of approval status
+
+# Output guidelines:
+# - Use clear, concise language
+# - Personalize feedback based on skill level
+# - smalltalk is okay, but focus on the approach
+
+# """
+
+
+#         try:
+#             response = self.model.generate_content(prompt)
+#             response_text = response.text.strip()
+            
+#             # Clean up the response to extract JSON
+#             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+#             if json_match:
+#                 json_response = json.loads(json_match.group())
+                
+#                 # Personalize message based on skill level
+#                 personalized_message = self._personalize_message(
+#                     json_response["message"], 
+#                     json_response["skill_level"]
+#                 )
+#                 json_response["message"] = personalized_message
+                
+#                 return json_response
+#             else:
+#                 raise ValueError("No JSON found in response")
+                
+#         except Exception as e:
+#             print(f"[Mentor Agent Error] {e}")
+#             return {
+#                 "skill_level": current_skill_level or "Intermediate",
+#                 "approved": False,
+#                 "message": "I need a bit more detail about your approach. Can you explain your thinking step by step?",
+#                 "reasoning": "Error in processing",
+#                 "hint": "Try breaking down the problem into smaller parts."
+#             }
+    
+#     def give_hint(self, skill_level: str, problem: dict) -> str:
+#         """Provides skill-appropriate hints"""
+        
+#         hint_prompts = {
+#             "Beginner": f"""
+#             Give a beginner-friendly hint for this problem: {problem['title']}
+#             Description: {problem['description']}
+            
+#             Focus on:
+#             - Basic approach or pattern
+#             - What data structure might help
+#             - Simple step-by-step guidance
+#             Keep it encouraging and not too revealing.
+#             """,
+            
+#             "Intermediate": f"""
+#             Give an intermediate-level hint for: {problem['title']}
+#             Description: {problem['description']}
+            
+#             Focus on:
+#             - Optimization opportunities
+#             - Time/space complexity considerations
+#             - Alternative approaches
+#             """,
+            
+#             "Advanced": f"""
+#             Give an advanced hint for: {problem['title']}
+#             Description: {problem['description']}
+            
+#             Focus on:
+#             - Edge cases to consider
+#             - Proof of correctness
+#             - Most optimal solution insights
+#             """
+#         }
+        
+#         prompt = hint_prompts.get(skill_level, hint_prompts["Intermediate"])
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             return response.text.strip()
+#         except Exception as e:
+#             fallback_hints = {
+#                 "Beginner": "Think about what data structure could help you look up values quickly. 🤔",
+#                 "Intermediate": "Consider the time complexity - can you reduce it using additional space?",
+#                 "Advanced": "What edge cases might break your current approach? How would you handle them?"
+#             }
+#             return fallback_hints.get(skill_level, "Keep thinking - you're on the right track!")
+    
+#     def _personalize_message(self, message: str, skill_level: str) -> str:
+#         """Add personality based on skill level"""
+        
+#         personality_prefixes = {
+#             "Beginner": "🌟 Great start! ",
+#             "Intermediate": "👍 Nice thinking! ",
+#             "Advanced": "💡 Excellent analysis! "
+#         }
+        
+#         personality_suffixes = {
+#             "Beginner": " Remember, every expert was once a beginner! 🚀",
+#             "Intermediate": " You're developing strong problem-solving skills! 💪",
+#             "Advanced": " Your systematic approach is impressive! 🎯"
+#         }
+        
+#         prefix = personality_prefixes.get(skill_level, "")
+#         suffix = personality_suffixes.get(skill_level, "")
+        
+#         return f"{prefix}{message}{suffix}"
+    
+#     def get_encouragement(self, skill_level: str, hints_used: int) -> str:
+#         """Provides encouragement based on performance"""
+        
+#         if hints_used == 0:
+#             messages = {
+#                 "Beginner": "Wow! You figured that out on your own! 🌟",
+#                 "Intermediate": "Excellent independent thinking! 🎯",
+#                 "Advanced": "Outstanding problem-solving skills! 🏆"
+#             }
+#         elif hints_used <= 2:
+#             messages = {
+#                 "Beginner": "Great job using hints effectively! 👍",
+#                 "Intermediate": "Good balance of independent work and guidance! 💪",
+#                 "Advanced": "Smart use of hints to validate your thinking! 🧠"
+#             }
+#         else:
+#             messages = {
+#                 "Beginner": "Don't worry - learning takes practice! Keep going! 🚀",
+#                 "Intermediate": "Challenging problems require patience. You're learning! 📚",
+#                 "Advanced": "Even experts need different perspectives sometimes! 🤝"
+#             }
+        
+#         return messages.get(skill_level, "Keep up the great work!")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CODE agent
+
+# from utils.gemini_client import get_gemini_model
+# import re
+# import json
+# import ast
+
+# class CodeAgent:
+#     def __init__(self):
+#         self.model = get_gemini_model()
+    
+#     def evaluate_code(self, user_code: str, problem: dict, skill_level: str) -> dict:
+#         """
+#         Comprehensive code evaluation
+#         Returns: {
+#             "passed": bool,
+#             "feedback": str,
+#             "bugs": list,
+#             "optimizations": list,
+#             "complexity": dict
+#         }
+#         """
+        
+#         # First, check if code is syntactically valid
+#         syntax_check = self._check_syntax(user_code)
+#         if not syntax_check["valid"]:
+#             return {
+#                 "passed": False,
+#                 "feedback": f"❌ **Syntax Error:** {syntax_check['error']}\n\nPlease fix the syntax and try again.",
+#                 "bugs": [syntax_check['error']],
+#                 "optimizations": [],
+#                 "complexity": {}
+#             }
+        
+#         prompt = f"""
+# You are an expert code reviewer for DSA problems. Analyze this solution thoroughly.
+
+# Problem: {problem['title']} ({problem['difficulty']})
+# Description: {problem['description']}
+# Student Level: {skill_level}
+
+# Code to analyze:
+# ```python
+# {user_code}
+# ```
+
+# Provide analysis in JSON format:
+# {{
+#     "passed": true/false,
+#     "overall_rating": "Excellent|Good|Needs Improvement|Poor",
+#     "correctness": "Analysis of logical correctness",
+#     "time_complexity": "Big O time complexity",
+#     "space_complexity": "Big O space complexity",
+#     "bugs": ["List of bugs/issues found"],
+#     "optimizations": ["List of possible optimizations"],
+#     "edge_cases": ["Edge cases that might not be handled"],
+#     "feedback": "Detailed friendly feedback with specific examples",
+#     "next_steps": "What the student should focus on improving"
+# }}
+
+# Testing criteria:
+# 1. Does it solve the basic problem correctly?
+# 2. Does it handle edge cases appropriately?
+# 3. Is the complexity reasonable for the problem?
+# 4. Are there obvious bugs or logical errors?
+# 5. Code quality and readability
+
+# Be encouraging but thorough. Give specific examples of issues found.
+# """
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             response_text = response.text.strip()
+            
+#             # Extract JSON from response
+#             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+#             if json_match:
+#                 result = json.loads(json_match.group())
+                
+#                 # Format the feedback nicely
+#                 formatted_feedback = self._format_feedback(result, skill_level)
+#                 result["feedback"] = formatted_feedback
+                
+#                 return result
+#             else:
+#                 raise ValueError("No JSON found in response")
+                
+#         except Exception as e:
+#             print(f"[Code Agent Error] {e}")
+#             return {
+#                 "passed": False,
+#                 "feedback": "⚠️ Unable to evaluate code at the moment. Please check your solution manually.",
+#                 "bugs": ["Evaluation service unavailable"],
+#                 "optimizations": [],
+#                 "complexity": {}
+#             }
+    
+#     def chat_assistance(self, user_question: str, user_code: str, problem: dict, skill_level: str) -> str:
+#         """Enhanced real-time coding assistance - focuses on guidance rather than direct solutions"""
+        
+#         prompt = f"""
+# You are a helpful DSA coding mentor for a {skill_level} level student. Your role is to GUIDE and TEACH, not to provide direct code solutions.
+
+# Problem: {problem['title']} ({problem['description']})
+
+# Student's current code:
+# ```python
+# {user_code}
+# ```
+
+# Student's question: "{user_question}"
+
+# IMPORTANT GUIDELINES:
+# 1. DO NOT write complete code solutions for the student
+# 2. Instead, provide conceptual guidance, hints, and explanations
+# 3. If they ask "how to implement X", explain the approach/algorithm steps
+# 4. If they ask for optimization, guide them to think about different approaches
+# 5. If they have bugs, point them to the problematic area and ask guiding questions
+# 6. Use pseudocode or small code snippets (2-3 lines max) only when absolutely necessary for clarity
+# 7. Encourage them to think through the problem themselves
+
+# Your response should:
+# - Ask clarifying questions to make them think
+# - Provide hints and direction rather than solutions
+# - Explain concepts and approaches
+# - Point out what they're missing conceptually
+# - Give them steps to think through, not code to copy
+
+# Examples of good responses:
+# - "Think about what data structure would help you quickly check if an element exists..."
+# - "Consider the time complexity of your current approach. What happens when you have nested loops?"
+# - "You're on the right track! But what happens when the array is empty? How would you handle that case?"
+# - "Instead of nested loops, think about what you could store in a hash map to solve this in one pass..."
+
+# Keep responses concise but educational. Focus on building their problem-solving skills.
+# """
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             return response.text.strip()
+#         except Exception as e:
+#             print(f"[Code Chat Error] {e}")
+#             return "❌ I'm having trouble processing your question right now. Please try rephrasing or ask again in a moment."
+    
+#     def suggest_test_cases(self, problem: dict, user_code: str) -> list:
+#         """Generate test cases for the problem"""
+        
+#         prompt = f"""
+# Generate comprehensive test cases for this DSA problem:
+
+# Problem: {problem['title']}
+# Description: {problem['description']}
+
+# Include:
+# 1. Basic test cases (given examples)
+# 2. Edge cases (empty input, single element, etc.)
+# 3. Corner cases (maximum constraints, negative numbers, etc.)
+
+# Format as a list of dictionaries with 'input' and 'expected_output' keys.
+# Respond in JSON format: {{"test_cases": [...]}}
+# """
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             response_text = response.text.strip()
+            
+#             json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+#             if json_match:
+#                 result = json.loads(json_match.group())
+#                 return result.get("test_cases", [])
+#             return []
+#         except Exception as e:
+#             print(f"[Test Case Generation Error] {e}")
+#             return []
+    
+#     def _check_syntax(self, code: str) -> dict:
+#         """Check if Python code has valid syntax"""
+#         try:
+#             ast.parse(code)
+#             return {"valid": True, "error": None}
+#         except SyntaxError as e:
+#             return {
+#                 "valid": False,
+#                 "error": f"Line {e.lineno}: {e.msg}"
+#             }
+#         except Exception as e:
+#             return {
+#                 "valid": False,
+#                 "error": f"Code parsing error: {str(e)}"
+#             }
+    
+#     def _format_feedback(self, result: dict, skill_level: str) -> str:
+#         """Format the evaluation feedback nicely"""
+        
+#         feedback = []
+        
+#         # Overall assessment
+#         if result.get("passed"):
+#             feedback.append("✅ **Great job!** Your solution looks good overall.")
+#         else:
+#             feedback.append("⚠️ **Almost there!** Let's address a few issues.")
+        
+#         # Correctness
+#         if result.get("correctness"):
+#             feedback.append(f"**Logic:** {result['correctness']}")
+        
+#         # Complexity analysis (adjust detail based on skill level)
+#         if skill_level != "Beginner":
+#             time_comp = result.get("time_complexity", "Not analyzed")
+#             space_comp = result.get("space_complexity", "Not analyzed")
+#             feedback.append(f"**Complexity:** Time: {time_comp}, Space: {space_comp}")
+        
+#         # Bugs
+#         if result.get("bugs"):
+#             feedback.append("**🐛 Issues Found:**")
+#             for bug in result["bugs"]:
+#                 feedback.append(f"  • {bug}")
+        
+#         # Optimizations (show more for intermediate/advanced)
+#         if result.get("optimizations") and skill_level != "Beginner":
+#             feedback.append("**🚀 Optimization Ideas:**")
+#             for opt in result["optimizations"]:
+#                 feedback.append(f"  • {opt}")
+        
+#         # Edge cases
+#         if result.get("edge_cases") and skill_level == "Advanced":
+#             feedback.append("**⚠️ Edge Cases to Consider:**")
+#             for edge in result["edge_cases"]:
+#                 feedback.append(f"  • {edge}")
+        
+#         # Next steps
+#         if result.get("next_steps"):
+#             feedback.append(f"**🎯 Focus Areas:** {result['next_steps']}")
+        
+#         return "\n\n".join(feedback)
+    
+#     def debug_assistance(self, user_code: str, error_message: str, skill_level: str) -> str:
+#         """Help debug specific errors"""
+        
+#         prompt = f"""
+# A {skill_level} level student has encountered this error:
+
+# Error: {error_message}
+
+# In this code:
+# ```python
+# {user_code}
+# ```
+
+# Provide specific debugging help:
+# 1. Identify the likely cause
+# 2. Suggest specific fixes
+# 3. Explain why this error occurred (in simple terms for beginners, more technical for advanced)
+
+# Be encouraging and provide concrete solutions.
+# """
+        
+#         try:
+#             response = self.model.generate_content(prompt)
+#             return response.text.strip()
+#         except Exception as e:
+#             return f"Having trouble analyzing the error. Common issues to check: syntax errors, variable names, indentation, and logic flow."
+

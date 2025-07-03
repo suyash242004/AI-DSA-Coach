@@ -196,17 +196,42 @@ class AgentOrchestrator:
         
         return False
     
+    # def get_progress_summary(self) -> Dict[str, Any]:
+    #     analytics = self.get_session_analytics()
+    
+    #     # Map states to your actual UI
+    #     if self.current_state in [AgentState.MENTORING]:
+    #         progress_percentage = 33
+    #         phase_name = "Mentor Agent"
+    #     elif self.current_state in [AgentState.CODING]:
+    #         progress_percentage = 67
+    #         phase_name = "Code Agent"
+    #     elif self.current_state in [AgentState.EVALUATION, AgentState.COMPLETED]:
+    #         progress_percentage = 100
+    #         phase_name = "Evaluation Agent"
+    #     else:
+    #         progress_percentage = 0
+    #         phase_name = "Unknown"
+    
+    #     return {
+    #         "progress_percentage": progress_percentage,
+    #         "current_phase": self.get_active_agent(),
+    #         "time_spent": analytics["total_duration"],
+    #         "interactions": analytics["user_interactions"],
+    #         "next_action": self.get_next_recommended_action()
+    #     }
+    
     def get_progress_summary(self) -> Dict[str, Any]:
         """Get a summary of user's progress through the session"""
         analytics = self.get_session_analytics()
         
         progress_percentage = 0
         if self.current_state == AgentState.MENTORING:
-            progress_percentage = 25
+            progress_percentage = 33
         elif self.current_state == AgentState.CODING:
-            progress_percentage = 60
+            progress_percentage = 67
         elif self.current_state == AgentState.EVALUATION:
-            progress_percentage = 90
+            progress_percentage = 100
         elif self.current_state == AgentState.COMPLETED:
             progress_percentage = 100
         
@@ -217,3 +242,6 @@ class AgentOrchestrator:
             "interactions": analytics["user_interactions"],
             "next_action": self.get_next_recommended_action()
         }
+   
+    
+    

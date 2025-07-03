@@ -1,7 +1,8 @@
+
 from utils.gemini_client import get_gemini_model
 import json
 import re
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
 
 class EvaluationAgent:
     def __init__(self):
@@ -10,24 +11,22 @@ class EvaluationAgent:
     def generate_evaluation(self, skill_level: str, hints_used: int, final_code: str, 
                           problem: dict, conversation_history: List[dict]) -> Dict[str, str]:
         """
-        Generate comprehensive evaluation of the learning session
+        Generate technical evaluation focused on DSA skills and code quality
         """
         
-        # Analyze conversation quality
-        conversation_analysis = self._analyze_conversation(conversation_history, skill_level)
-        
-        # Analyze code quality
-        code_analysis = self._analyze_code_quality(final_code, problem, skill_level)
+        # Quick technical analysis
+        code_metrics = self._analyze_code_technical(final_code, problem)
+        complexity_analysis = self._analyze_complexity(final_code, problem)
+        approach_quality = self._evaluate_approach_quality(conversation_history, skill_level)
         
         prompt = f"""
-You are an expert educational evaluator for DSA learning. Provide a comprehensive evaluation of this learning session.
+You are a technical DSA interview evaluator. Provide a CONCISE, TECHNICAL evaluation.
 
-Session Details:
-- Problem: {problem['title']} ({problem['difficulty']})
-- Student Level: {skill_level}
-- Hints Used: {hints_used}
-- Conversation Quality: {conversation_analysis}
-- Code Analysis: {code_analysis}
+Problem: {problem['title']} ({problem['difficulty']})
+Skill Level: {skill_level}
+Hints Used: {hints_used}
+Code Analysis: {code_metrics}
+Complexity: {complexity_analysis}
 
 Final Code:
 ```python
@@ -36,25 +35,19 @@ Final Code:
 
 Provide evaluation in JSON format:
 {{
-    "overall_performance": "Excellent|Good|Satisfactory|Needs Improvement",
-    "summary": "Brief overall summary of performance",
-    "detailed_analysis": "Detailed breakdown of strengths and areas for improvement",
-    "thought_process_score": 1-10,
-    "code_quality_score": 1-10,
-    "problem_solving_approach": "Analysis of their approach",
-    "learning_indicators": ["List of positive learning behaviors observed"],
-    "improvement_areas": ["Specific areas to focus on"],
-    "recommendations": "Specific next steps and practice suggestions",
-    "skill_level_assessment": "Current skill level assessment with reasoning",
-    "next_difficulty": "Recommended next problem difficulty"
+    "technical_score": 1-10,
+    "approach_score": 1-10,
+    "time_complexity": "O(...)",
+    "space_complexity": "O(...)",
+    "is_optimal": true/false,
+    "correctness": "Correct|Mostly Correct|Incorrect",
+    "key_strengths": ["max 2 technical strengths"],
+    "main_weakness": "single biggest technical issue",
+    "optimization_tip": "one specific improvement",
+    "next_focus": "specific skill to practice next"
 }}
 
-Consider:
-1. How well did they articulate their thought process?
-2. Did they show good problem-solving methodology?
-3. How efficiently did they use hints?
-4. Code correctness and optimization
-5. Learning progression indicators
+Be direct, technical, and focus on DSA fundamentals. No fluff.
 """
         
         try:
@@ -66,11 +59,10 @@ Consider:
             if json_match:
                 evaluation_data = json.loads(json_match.group())
                 
-                # Format the evaluation nicely
                 return {
-                    "summary": self._format_summary(evaluation_data),
-                    "detailed_analysis": self._format_detailed_analysis(evaluation_data),
-                    "recommendations": self._format_recommendations(evaluation_data, skill_level),
+                    "summary": self._format_technical_summary(evaluation_data, hints_used),
+                    "complexity_analysis": self._format_complexity_analysis(evaluation_data, complexity_analysis),
+                    "actionable_feedback": self._format_actionable_feedback(evaluation_data, skill_level),
                     "raw_data": evaluation_data
                 }
             else:
@@ -78,272 +70,214 @@ Consider:
                 
         except Exception as e:
             print(f"[Evaluation Agent Error] {e}")
-            return self._generate_fallback_evaluation(skill_level, hints_used, final_code)
+            return self._generate_technical_fallback(skill_level, hints_used, final_code, problem)
     
-    def _analyze_conversation(self, conversation_history: List[dict], skill_level: str) -> str:
-        """Analyze the quality of mentor-student conversation"""
-        
-        if not conversation_history:
-            return "Limited conversation data"
-        
-        user_messages = [msg for msg in conversation_history if msg.get("role") == "user"]
-        
-        analysis_points = []
-        
-        # Check conversation depth
-        if len(user_messages) >= 3:
-            analysis_points.append("Good engagement level")
-        elif len(user_messages) >= 1:
-            analysis_points.append("Moderate engagement")
-        else:
-            analysis_points.append("Limited engagement")
-        
-        # Analyze message quality (basic heuristics)
-        avg_message_length = sum(len(msg.get("content", "")) for msg in user_messages) / max(len(user_messages), 1)
-        
-        if avg_message_length > 100:
-            analysis_points.append("Detailed responses")
-        elif avg_message_length > 50:
-            analysis_points.append("Adequate detail in responses")
-        else:
-            analysis_points.append("Brief responses")
-        
-        return "; ".join(analysis_points)
-    
-    def _analyze_code_quality(self, code: str, problem: dict, skill_level: str) -> str:
-        """Basic code quality analysis"""
-        
+    def _analyze_code_technical(self, code: str, problem: dict) -> str:
+        """Quick technical code analysis"""
         if not code.strip():
-            return "No code submitted"
+            return "No solution submitted"
         
-        analysis_points = []
+        metrics = []
         
-        # Basic metrics
-        lines_of_code = len([line for line in code.split('\n') if line.strip()])
+        # Check for common DSA patterns
+        patterns = {
+            "two_pointer": ["left", "right", "start", "end"],
+            "sliding_window": ["window", "left", "right"],
+            "hashmap": ["dict", "{}", "Counter", "defaultdict"],
+            "sorting": ["sort", "sorted"],
+            "recursion": ["def.*\\(.*\\).*:", "return.*\\("],
+            "dp": ["dp", "memo", "cache"],
+            "binary_search": ["mid", "left.*right", "binary"]
+        }
         
-        if lines_of_code > 50:
-            analysis_points.append("Comprehensive solution")
-        elif lines_of_code > 10:
-            analysis_points.append("Well-structured solution")
+        code_lower = code.lower()
+        detected_patterns = []
+        for pattern, keywords in patterns.items():
+            if any(keyword in code_lower for keyword in keywords):
+                detected_patterns.append(pattern)
+        
+        if detected_patterns:
+            metrics.append(f"Patterns: {', '.join(detected_patterns)}")
+        
+        # Code structure analysis
+        lines = len([l for l in code.split('\n') if l.strip()])
+        if lines > 20:
+            metrics.append("Complex solution")
+        elif lines > 10:
+            metrics.append("Standard solution")
         else:
-            analysis_points.append("Concise solution")
+            metrics.append("Concise solution")
         
-        # Check for common patterns
-        if "def " in code:
-            analysis_points.append("Function-based approach")
-        
-        if any(keyword in code.lower() for keyword in ["time", "space", "complexity"]):
-            analysis_points.append("Complexity-aware")
-        
-        if "# " in code or '"""' in code:
-            analysis_points.append("Well-commented")
-        
-        return "; ".join(analysis_points)
+        return "; ".join(metrics) if metrics else "Basic implementation"
     
-    def _format_summary(self, evaluation_data: dict) -> str:
-        """Format the performance summary"""
+    def _analyze_complexity(self, code: str, problem: dict) -> str:
+        """Analyze time/space complexity heuristically"""
+        if not code.strip():
+            return "No complexity analysis possible"
         
-        performance = evaluation_data.get("overall_performance", "Good")
-        thought_score = evaluation_data.get("thought_process_score", 7)
-        code_score = evaluation_data.get("code_quality_score", 7)
+        complexity_indicators = []
         
-        summary_parts = [
-            f"## 🎯 Overall Performance: {performance}",
-            "",
-            f"**Thought Process:** {thought_score}/10 {'🌟' * min(thought_score//2, 5)}",
-            f"**Code Quality:** {code_score}/10 {'🌟' * min(code_score//2, 5)}",
-            "",
-            evaluation_data.get("summary", "Good work on this problem!")
+        # Time complexity indicators
+        nested_loops = code.count('for') + code.count('while')
+        if nested_loops >= 2:
+            complexity_indicators.append("Likely O(n²) time")
+        elif nested_loops >= 1:
+            complexity_indicators.append("Likely O(n) time")
+        
+        # Space complexity indicators
+        if any(keyword in code.lower() for keyword in ['dict', 'set', 'list', 'array']):
+            complexity_indicators.append("O(n) space")
+        else:
+            complexity_indicators.append("O(1) space")
+        
+        return "; ".join(complexity_indicators)
+    
+    def _evaluate_approach_quality(self, conversation_history: List[dict], skill_level: str) -> int:
+        """Evaluate approach discussion quality (1-10)"""
+        if not conversation_history:
+            return 5
+        
+        user_messages = [msg.get("content", "") for msg in conversation_history if msg.get("role") == "user"]
+        
+        # Check for technical keywords in user responses
+        technical_keywords = [
+            "complexity", "algorithm", "data structure", "optimize", 
+            "efficient", "brute force", "pattern", "approach"
         ]
         
-        return "\n".join(summary_parts)
+        technical_score = 0
+        for msg in user_messages:
+            msg_lower = msg.lower()
+            technical_score += sum(1 for keyword in technical_keywords if keyword in msg_lower)
+        
+        # Normalize to 1-10 scale
+        return min(10, max(1, technical_score + 5))
     
-    def _format_detailed_analysis(self, evaluation_data: dict) -> str:
-        """Format the detailed analysis"""
+    def _format_technical_summary(self, eval_data: dict, hints_used: int) -> str:
+        """Format concise technical summary"""
+        technical_score = eval_data.get("technical_score", 7)
+        approach_score = eval_data.get("approach_score", 7)
+        correctness = eval_data.get("correctness", "Mostly Correct")
         
-        analysis_parts = []
+        # Performance rating
+        avg_score = (technical_score + approach_score) / 2
+        if avg_score >= 8:
+            rating = "🟢 Strong"
+        elif avg_score >= 6:
+            rating = "🟡 Good"
+        else:
+            rating = "🔴 Needs Work"
         
-        # Problem-solving approach
-        if evaluation_data.get("problem_solving_approach"):
-            analysis_parts.extend([
-                "### 🧠 Problem-Solving Approach",
-                evaluation_data["problem_solving_approach"],
-                ""
-            ])
-        
-        # Learning indicators
-        if evaluation_data.get("learning_indicators"):
-            analysis_parts.extend([
-                "### ✅ Positive Learning Behaviors",
-                ""
-            ])
-            for indicator in evaluation_data["learning_indicators"]:
-                analysis_parts.append(f"• {indicator}")
-            analysis_parts.append("")
-        
-        # Areas for improvement
-        if evaluation_data.get("improvement_areas"):
-            analysis_parts.extend([
-                "### 🎯 Areas for Growth",
-                ""
-            ])
-            for area in evaluation_data["improvement_areas"]:
-                analysis_parts.append(f"• {area}")
-            analysis_parts.append("")
-        
-        # Skill level assessment
-        if evaluation_data.get("skill_level_assessment"):
-            analysis_parts.extend([
-                "### 📊 Skill Level Assessment",
-                evaluation_data["skill_level_assessment"],
-                ""
-            ])
-        
-        return "\n".join(analysis_parts)
+        return f"""## {rating} Performance
+
+**Technical Implementation:** {technical_score}/10  
+**Problem Solving:** {approach_score}/10  
+**Solution Status:** {correctness}  
+**Hints Used:** {hints_used}"""
     
-    def _format_recommendations(self, evaluation_data: dict, skill_level: str) -> str:
-        """Format recommendations and next steps"""
+    def _format_complexity_analysis(self, eval_data: dict, complexity_analysis: str) -> str:
+        """Format complexity analysis"""
+        time_complexity = eval_data.get("time_complexity", "Not analyzed")
+        space_complexity = eval_data.get("space_complexity", "Not analyzed")
+        is_optimal = eval_data.get("is_optimal", False)
         
-        rec_parts = []
+        optimal_status = "✅ Optimal" if is_optimal else "⚠️ Can be optimized"
         
-        # Next difficulty recommendation
-        next_diff = evaluation_data.get("next_difficulty", "Same level")
-        rec_parts.extend([
-            f"### 🚀 Next Steps",
-            f"**Recommended Next Difficulty:** {next_diff}",
-            ""
+        return f"""### ⚡ Complexity Analysis
+
+**Time Complexity:** {time_complexity}  
+**Space Complexity:** {space_complexity}  
+**Optimization Status:** {optimal_status}
+
+*Analysis: {complexity_analysis}*"""
+    
+    def _format_actionable_feedback(self, eval_data: dict, skill_level: str) -> str:
+        """Format actionable, specific feedback"""
+        strengths = eval_data.get("key_strengths", [])
+        weakness = eval_data.get("main_weakness", "Continue practicing")
+        optimization_tip = eval_data.get("optimization_tip", "Focus on edge cases")
+        next_focus = eval_data.get("next_focus", "Practice more problems")
+        
+        feedback_parts = []
+        
+        # Strengths (max 2, keep it short)
+        if strengths:
+            feedback_parts.extend([
+                "### ✅ Key Strengths",
+                ""
+            ])
+            for strength in strengths[:2]:
+                feedback_parts.append(f"• {strength}")
+            feedback_parts.append("")
+        
+        # Main area to improve
+        feedback_parts.extend([
+            "### 🎯 Main Area to Improve",
+            f"**{weakness}**",
+            "",
+            "### 💡 Quick Optimization Tip",
+            optimization_tip,
+            "",
+            "### 📚 Next Focus",
+            f"Practice: {next_focus}"
         ])
         
-        # Specific recommendations
-        if evaluation_data.get("recommendations"):
-            rec_parts.extend([
-                "### 💡 Specific Recommendations",
-                evaluation_data["recommendations"],
-                ""
-            ])
-        
-        # Practice suggestions based on skill level
-        practice_suggestions = self._get_practice_suggestions(skill_level, evaluation_data)
-        if practice_suggestions:
-            rec_parts.extend([
-                "### 📚 Practice Suggestions",
-                ""
-            ])
-            for suggestion in practice_suggestions:
-                rec_parts.append(f"• {suggestion}")
-        
-        return "\n".join(rec_parts)
+        return "\n".join(feedback_parts)
     
-    def _get_practice_suggestions(self, skill_level: str, evaluation_data: dict) -> List[str]:
-        """Generate practice suggestions based on performance"""
+    def _generate_technical_fallback(self, skill_level: str, hints_used: int, 
+                                   final_code: str, problem: dict) -> Dict[str, str]:
+        """Generate fallback technical evaluation"""
         
-        suggestions = []
+        # Basic scoring based on hints and code presence
+        if not final_code.strip():
+            tech_score = 2
+            correctness = "Incomplete"
+        elif hints_used <= 1:
+            tech_score = 8
+            correctness = "Likely Correct"
+        elif hints_used <= 3:
+            tech_score = 6
+            correctness = "Mostly Correct"
+        else:
+            tech_score = 4
+            correctness = "Needs Review"
         
-        # Based on skill level
-        if skill_level == "Beginner":
-            suggestions.extend([
-                "Practice more array and string manipulation problems",
-                "Focus on understanding time complexity basics",
-                "Work through problems step-by-step with pen and paper first"
-            ])
-        elif skill_level == "Intermediate":
-            suggestions.extend([
-                "Explore advanced data structures (trees, graphs)",
-                "Practice dynamic programming problems",
-                "Focus on optimization techniques"
-            ])
-        else:  # Advanced
-            suggestions.extend([
-                "Tackle system design problems",
-                "Practice competitive programming challenges",
-                "Focus on proving correctness of solutions"
-            ])
-        
-        # Based on performance
-        thought_score = evaluation_data.get("thought_process_score", 7)
-        code_score = evaluation_data.get("code_quality_score", 7)
-        
-        if thought_score < 6:
-            suggestions.append("Practice explaining your approach before coding")
-        
-        if code_score < 6:
-            suggestions.append("Focus on writing cleaner, more readable code")
-        
-        return suggestions[:4]  # Limit to 4 suggestions
-    
-    def _generate_fallback_evaluation(self, skill_level: str, hints_used: int, final_code: str) -> Dict[str, str]:
-        """Generate a basic evaluation when AI analysis fails"""
-        
-        performance_level = "Good"
-        if hints_used <= 1:
-            performance_level = "Excellent"
-        elif hints_used >= 4:
-            performance_level = "Needs Improvement"
+        # Estimate complexity based on code patterns
+        time_complexity = "O(n)" if "for" in final_code else "O(1)"
+        space_complexity = "O(n)" if any(ds in final_code for ds in ["list", "dict", "set"]) else "O(1)"
         
         return {
-            "summary": f"""
-## 🎯 Overall Performance: {performance_level}
+            "summary": f"""## {'🟢 Good' if tech_score >= 6 else '⚠️ Fair'} Performance
 
-**Thought Process:** 7/10 🌟🌟🌟
-**Code Quality:** 7/10 🌟🌟🌟
+**Technical Implementation:** {tech_score}/10  
+**Problem Solving:** {tech_score}/10  
+**Solution Status:** {correctness}  
+**Hints Used:** {hints_used}""",
+            
+            "complexity_analysis": f"""### ⚡ Complexity Analysis
 
-You've made good progress on this problem! Your approach shows understanding of the core concepts.
-""",
-            "detailed_analysis": f"""
-### 🧠 Problem-Solving Approach
-You demonstrated a {skill_level.lower()}-level approach to this problem. 
+**Time Complexity:** {time_complexity}  
+**Space Complexity:** {space_complexity}  
+**Optimization Status:** {'✅ Good approach' if hints_used <= 2 else '⚠️ Can optimize'}""",
+            
+            "actionable_feedback": f"""### ✅ Key Strengths
+• Completed the problem
+• {'Efficient hint usage' if hints_used <= 2 else 'Engaged with mentor system'}
 
-### ✅ Positive Learning Behaviors
-• Engaged with the mentor system
-• {"Used hints efficiently" if hints_used <= 2 else "Sought help when needed"}
-• Completed the coding phase
+### 🎯 Main Area to Improve
+**Focus on {skill_level.lower()}-level optimization patterns**
 
-### 🎯 Areas for Growth
-• Continue practicing similar problems
-• Focus on explaining your approach clearly
-""",
-            "recommendations": f"""
-### 🚀 Next Steps
-**Recommended Next Difficulty:** {"Same level" if hints_used > 2 else "Slightly harder"}
+### 💡 Quick Optimization Tip
+Review time complexity and consider more efficient data structures
 
-### 💡 Specific Recommendations
-Continue practicing problems at your level to build confidence and pattern recognition.
-
-### 📚 Practice Suggestions
-• Work on similar problem types
-• Practice explaining solutions out loud
-• Focus on time complexity analysis
-""",
+### 📚 Next Focus
+Practice: Similar {problem.get('difficulty', 'medium')} level problems""",
+            
             "raw_data": {
-                "overall_performance": performance_level,
-                "thought_process_score": 7,
-                "code_quality_score": 7
+                "technical_score": tech_score,
+                "approach_score": tech_score,
+                "time_complexity": time_complexity,
+                "space_complexity": space_complexity,
+                "correctness": correctness
             }
         }
-    
-    def generate_progress_report(self, session_history: List[dict]) -> str:
-        """Generate a progress report across multiple problems"""
-        
-        if not session_history:
-            return "No session history available."
-        
-        prompt = f"""
-Analyze this student's progress across multiple DSA problems and generate a learning progress report.
-
-Session History:
-{json.dumps(session_history, indent=2)}
-
-Focus on:
-1. Skill progression over time
-2. Consistent strengths and weaknesses
-3. Learning velocity
-4. Recommended learning path
-
-Provide an encouraging but honest assessment of their progress.
-"""
-        
-        try:
-            response = self.model.generate_content(prompt)
-            return response.text.strip()
-        except Exception as e:
-            return f"Progress analysis temporarily unavailable. Based on your recent sessions, you're making steady progress!"
