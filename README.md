@@ -31,7 +31,7 @@ AI DSA Coach is an innovative platform that combines a LeetCode-like interface w
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/your-username/dsa-ai-coach.git
+   git clone https:https://github.com/suyash242004/AI-DSA-Coach.git
    cd dsa-ai-coach
    ```
 
