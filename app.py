@@ -7,6 +7,8 @@ from agents.persona_agent import PersonaAgent
 from agents.orchestrator import AgentOrchestrator
 from utils.gemini_client import get_gemini_model
 
+from datetime import datetime, timedelta, date
+
 # Page configuration
 st.set_page_config(
     page_title="AI DSA Coach", 
@@ -589,6 +591,8 @@ def render_evaluation_panel():
             st.metric("State Changes", analytics['total_transitions'])
             st.metric("Frequency", f"{analytics['interaction_frequency']:.1f}/min")
         
+
+        
         # Actionable feedback - condensed
         st.markdown("---")
         st.markdown(evaluation["actionable_feedback"])
@@ -809,10 +813,16 @@ def safe_transition(target_state_func):
     else:
         st.error(f"❌ Cannot transition from {current_state} to requested state")
 
+
+
+
 # Main App
 def main():
+    
+    
     # Render top navigation
     render_top_nav()
+    
     
     # Set current problem if not set
     if not st.session_state.current_problem:
