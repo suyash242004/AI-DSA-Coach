@@ -1,0 +1,18 @@
+
+{
+  "name": "ai-dsa-coach-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for AI DSA Coach",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy:testnet": "hardhat run scripts/deploy.js --network u2u_testnet",
+    "deploy:mainnet": "hardhat run scripts/deploy.js --network u2u_mainnet",
+    "verify": "hardhat verify --network u2u_mainnet"
+  },
+  "dependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.0",
+    "@openzeppelin/contracts": "^4.9.0",
+    "hardhat": "^2.17.0",
+    "dotenv": "^16.0.0"
+  }
+}

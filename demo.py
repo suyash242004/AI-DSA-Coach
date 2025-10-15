@@ -1,13 +1,18 @@
-
 import streamlit as st
 import json
 from agents.mentor_agent import MentorAgent
 from agents.code_agent import CodeAgent
 from agents.evaluation_agent import EvaluationAgent
-from agents.persona_agent import PersonaAgent
 from agents.orchestrator import AgentOrchestrator
-from utils.gemini_client import get_gemini_model
 from datetime import datetime, timedelta, date
+
+# Web3 Integration (Optional)
+try:
+    from utils.web3_client import web3_client
+    WEB3_AVAILABLE = True
+except ImportError:
+    WEB3_AVAILABLE = False
+    web3_client = None
 
 # Page configuration
 st.set_page_config(
@@ -26,6 +31,51 @@ st.markdown("""
     .main-container {
         background-color: #ffffff;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    /* Web3 Enhancement Bar - Hidden by default */
+    .web3-enhancement-bar {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        display: none;
+        font-size: 14px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .web3-enhancement-bar.show {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from { transform: translateY(-100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    .web3-toggle {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        transition: all 0.2s ease;
+    }
+    
+    .web3-toggle:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
     }
     
     /* Top navigation bar */
@@ -213,6 +263,26 @@ st.markdown("""
         margin: 4px;
         display: inline-block;
     }
+    
+    .token-display {
+        background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
+        color: #000;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 14px;
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    }
+    
+    .web3-transaction {
+        background: linear-gradient(135deg, #00d4aa 0%, #00a86b 100%);
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 8px 0;
+        font-size: 14px;
+        font-weight: 500;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -303,7 +373,6 @@ def initialize_session_state():
         "mentor_agent": MentorAgent(),
         "code_agent": CodeAgent(),
         "evaluation_agent": EvaluationAgent(),
-        "persona_agent": PersonaAgent(),
         "current_problem": None,
         "selected_language": "Python",
         "skill_level": None,
@@ -315,14 +384,19 @@ def initialize_session_state():
         "session_data": {},
         "approach_approved": False,
         "active_tab": "problem",
-        "dsa_tokens": 10,  # Starting tokens
+        
+        # Web3 Integration (Optional)
+        "web3_enabled": False,
+        "wallet_connected": False,
+        "user_wallet_address": None,
+        "dsa_tokens": 10,  # Starting tokens (simulated if Web3 not available)
         "total_earned_tokens": 0,
         "daily_login_streak": 0,
         "last_login_date": None,
         "problems_solved_today": 0,
         "completed_problems": set(),  # Track unique problems solved
         "nft_certificates": [],  # Store NFT-like certificates
-        "wallet_connected": False,  # Simulated wallet connection status
+        "web3_transactions": [],  # Track transactions
     }
     
     for key, value in defaults.items():
@@ -331,7 +405,135 @@ def initialize_session_state():
 
 initialize_session_state()
 
-# Top Navigation Bar
+# Web3 Functions (Enhanced but Optional)
+def init_web3():
+    """Initialize Web3 connection if available"""
+    if WEB3_AVAILABLE and web3_client:
+        try:
+            return web3_client.initialize()
+        except Exception as e:
+            st.error(f"Web3 initialization failed: {e}")
+    return False
+
+def award_tokens_web3(amount: int, reason: str):
+    """Award tokens via Web3 if available, otherwise simulate"""
+    if st.session_state.web3_enabled and st.session_state.wallet_connected:
+        try:
+            # Real Web3 transaction
+            if WEB3_AVAILABLE:
+                tx_hash = web3_client.transfer_dsa_tokens(
+                    st.session_state.user_wallet_address, 
+                    amount
+                )
+                if tx_hash:
+                    st.session_state.web3_transactions.append({
+                        "type": "token_award",
+                        "hash": tx_hash,
+                        "amount": amount,
+                        "reason": reason,
+                        "timestamp": datetime.now().isoformat()
+                    })
+                    st.markdown(f'''
+                    <div class="web3-transaction">
+                        🎉 +{amount} DSA tokens earned on blockchain! {reason}
+                    </div>
+                    ''', unsafe_allow_html=True)
+                    return tx_hash
+        except Exception as e:
+            st.error(f"Web3 transaction failed: {e}")
+    
+    # Fallback to simulation
+    st.session_state.dsa_tokens += amount
+    st.session_state.total_earned_tokens += amount
+    st.success(f"🎉 +{amount} DSA tokens earned! {reason}")
+    return None
+
+def mint_nft_web3(problem: dict, skill_level: str):
+    """Mint NFT via Web3 if available, otherwise simulate"""
+    if st.session_state.web3_enabled and st.session_state.wallet_connected:
+        try:
+            if WEB3_AVAILABLE:
+                tx_hash = web3_client.mint_nft_badge(
+                    st.session_state.user_wallet_address,
+                    problem["title"],
+                    problem["difficulty"]
+                )
+                if tx_hash:
+                    certificate = {
+                        "problem_title": problem["title"],
+                        "difficulty": problem["difficulty"],
+                        "skill_level": skill_level,
+                        "tx_hash": tx_hash,
+                        "timestamp": datetime.now().isoformat(),
+                        "blockchain": True
+                    }
+                    st.session_state.nft_certificates.append(certificate)
+                    st.markdown(f'''
+                    <div class="web3-transaction">
+                        🏆 NFT Certificate minted on blockchain for {problem["title"]}!
+                    </div>
+                    ''', unsafe_allow_html=True)
+                    return
+        except Exception as e:
+            st.error(f"NFT minting failed: {e}")
+    
+    # Fallback to simulation
+    certificate = {
+        "problem_title": problem["title"],
+        "difficulty": problem["difficulty"],
+        "skill_level": skill_level,
+        "timestamp": datetime.now().isoformat(),
+        "blockchain": False
+    }
+    st.session_state.nft_certificates.append(certificate)
+    st.success(f"🎨 NFT Certificate earned for {problem['title']}!")
+
+# Web3 Enhancement Bar
+def render_web3_toggle():
+    """Render Web3 toggle button"""
+    if WEB3_AVAILABLE:
+        if st.button("🌐 Web3 Mode", key="web3_toggle", help="Toggle Web3 blockchain features"):
+            st.session_state.web3_enabled = not st.session_state.web3_enabled
+            if st.session_state.web3_enabled:
+                if init_web3():
+                    st.success("Web3 mode enabled! Connect your wallet to earn real tokens.")
+                else:
+                    st.session_state.web3_enabled = False
+                    st.error("Failed to initialize Web3 connection")
+            st.rerun()
+
+def render_web3_enhancement_bar():
+    """Render optional Web3 enhancement bar"""
+    if st.session_state.web3_enabled:
+        st.markdown('<div class="web3-enhancement-bar show">', unsafe_allow_html=True)
+        
+        col1, col2, col3, col4 = st.columns(4)
+        
+        with col1:
+            if st.session_state.wallet_connected:
+                st.markdown(f'<div class="wallet-connected">🟢 Wallet Connected</div>', unsafe_allow_html=True)
+            else:
+                if st.button("🔗 Connect Wallet", key="connect_wallet_btn"):
+                    # Simulate wallet connection
+                    st.session_state.user_wallet_address = "0x742d35Cc6634C0532925a3b8D5c27Aa4fCd52Ed2"
+                    st.session_state.wallet_connected = True
+                    st.success("Wallet connected!")
+                    st.rerun()
+        
+        with col2:
+            st.markdown(f'<div class="token-display">💰 {st.session_state.dsa_tokens} DSA</div>', unsafe_allow_html=True)
+        
+        with col3:
+            st.markdown(f"🏆 **NFTs:** {len(st.session_state.nft_certificates)}")
+        
+        with col4:
+            if st.button("❌ Disable Web3", key="disable_web3"):
+                st.session_state.web3_enabled = False
+                st.rerun()
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+
+# Your Original Functions (Preserved)
 def render_top_nav():
     problem_titles = [p["title"] for p in problems]
     
@@ -372,7 +574,7 @@ def render_top_nav():
             # Show progress instead of just status
             progress = st.session_state.orchestrator.get_progress_summary()
             st.progress(progress["progress_percentage"] / 100, 
-                        text=f"📍 {progress['current_phase']} ({progress['progress_percentage']}%)")
+                        text=f"🔍 {progress['current_phase']} ({progress['progress_percentage']}%)")
         
         with col5:
             if st.session_state.skill_level:
@@ -385,16 +587,13 @@ def render_top_nav():
                            unsafe_allow_html=True)
         
         with col6:
-            # DSA Token Display
-            st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="background: linear-gradient(45deg, #FFD700, #FFA500); 
-                             color: #000; padding: 4px 12px; border-radius: 20px; 
-                             font-size: 12px; font-weight: 700; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                    💰 ${st.session_state.dsa_tokens} DSA
-                </span>
-            </div>
-            """, unsafe_allow_html=True)
+            # Web3 Toggle Button
+            if WEB3_AVAILABLE:
+                if st.button("🌐", key="web3_toggle_nav", help="Toggle Web3 Features"):
+                    st.session_state.web3_enabled = not st.session_state.web3_enabled
+                    if st.session_state.web3_enabled and not init_web3():
+                        st.session_state.web3_enabled = False
+                    st.rerun()
         
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -434,11 +633,17 @@ def render_problem_panel():
             </div>
             """, unsafe_allow_html=True)
     
-    # Constraints (if available)
-    if "constraints" in selected_problem:
-        st.markdown("### 📏 Constraints")
-        for constraint in selected_problem["constraints"]:
-            st.markdown(f"• {constraint}")
+    # Web3 Rewards Info (if enabled)
+    if st.session_state.web3_enabled:
+        reward_amounts = {"Easy": 1, "Medium": 2, "Hard": 3}
+        base_reward = reward_amounts[selected_problem["difficulty"]]
+        
+        st.markdown("### 🎁 Web3 Rewards")
+        st.markdown(f"""
+        - **Base Reward:** {base_reward} DSA tokens
+        - **Efficiency Bonus:** +2 DSA (no hints used)
+        - **NFT Certificate:** Minted on U2U blockchain
+        """)
 
 def render_mentor_panel():
     st.markdown("### 🧠 Approach Discussion")
@@ -624,34 +829,36 @@ def render_evaluation_panel():
             st.metric("State Changes", analytics['total_transitions'])
             st.metric("Frequency", f"{analytics['interaction_frequency']:.1f}/min")
         
-        # Token Rewards and NFT Minting
-        st.markdown("### 💰 Rewards & Certificates")
-        problem_key = f"{st.session_state.current_problem}_{st.session_state.skill_level}"
-        if problem_key not in st.session_state.completed_problems:
-            # Calculate and award tokens
-            tokens_earned = calculate_problem_reward(
-                selected_problem["difficulty"], 
-                st.session_state.hints_used, 
-                st.session_state.skill_level or "Intermediate"
-            )
-            award_tokens(tokens_earned, f"Solved {selected_problem['difficulty']} problem!")
-            st.session_state.completed_problems.add(problem_key)
+        # Web3 Token Rewards and NFT Minting (if enabled)
+        if st.session_state.web3_enabled:
+            st.markdown("### 💰 Web3 Rewards")
+            problem_key = f"{st.session_state.current_problem}_{st.session_state.skill_level}"
             
-            # Mint NFT certificate (simulated)
-            mint_nft_certificate(selected_problem, st.session_state.skill_level)
-            
-            # Show breakdown
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                difficulty_points = {'Easy': 1, 'Medium': 2, 'Hard': 3}[selected_problem['difficulty']]
-                st.metric("Base Reward", f"{selected_problem['difficulty']} ({difficulty_points} DSA)")
-            with col2:
+            if problem_key not in st.session_state.completed_problems:
+                # Calculate and award tokens
+                difficulty_points = {'Easy': 1, 'Medium': 2, 'Hard': 3}
+                base_reward = difficulty_points.get(selected_problem['difficulty'], 1)
                 hint_bonus = max(0, 2 - st.session_state.hints_used)
-                st.metric("Efficiency Bonus", f"+{hint_bonus} DSA")
-            with col3:
-                st.metric("Total Earned", f"+{tokens_earned} DSA")
-        else:
-            st.info("💡 You've already earned tokens for this problem configuration!")
+                tokens_earned = base_reward + hint_bonus
+                
+                # Award tokens
+                award_tokens_web3(tokens_earned, f"Solved {selected_problem['difficulty']} problem!")
+                
+                # Mint NFT certificate
+                mint_nft_web3(selected_problem, st.session_state.skill_level or "Intermediate")
+                
+                st.session_state.completed_problems.add(problem_key)
+                
+                # Show breakdown
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Base Reward", f"{base_reward} DSA")
+                with col2:
+                    st.metric("Efficiency Bonus", f"+{hint_bonus} DSA")
+                with col3:
+                    st.metric("Total Earned", f"+{tokens_earned} DSA")
+            else:
+                st.info("💡 You've already earned rewards for this problem configuration!")
         
         # Actionable feedback
         st.markdown("---")
@@ -661,24 +868,29 @@ def render_evaluation_panel():
         st.markdown("---")
         st.markdown("### 🎯 Next Actions")
         
-        if st.button("🔄 Try New Problem", type="primary", use_container_width=True):
-            st.session_state.orchestrator.complete_session()
-            st.session_state.orchestrator.reset()
-            st.session_state.mentor_conversation = []
-            st.session_state.code_conversation = []
-            st.session_state.user_code = LANGUAGE_TEMPLATES[st.session_state.selected_language]
-            st.session_state.approach_approved = False
-            st.session_state.skill_level = None
-            st.session_state.hints_used = 0
-            st.rerun()
+        col1, col2, col3 = st.columns(3)
         
-        if st.button("🧠 Discuss Approach", use_container_width=True):
-            st.session_state.approach_approved = False
-            safe_transition(st.session_state.orchestrator.transition_to_mentoring)
+        with col1:
+            if st.button("🔄 Try New Problem", type="primary", use_container_width=True):
+                st.session_state.orchestrator.complete_session()
+                st.session_state.orchestrator.reset()
+                st.session_state.mentor_conversation = []
+                st.session_state.code_conversation = []
+                st.session_state.user_code = LANGUAGE_TEMPLATES[st.session_state.selected_language]
+                st.session_state.approach_approved = False
+                st.session_state.skill_level = None
+                st.session_state.hints_used = 0
+                st.rerun()
         
-        if st.button("💻 Back to Coding", use_container_width=True):
-            st.session_state.orchestrator.transition_to_coding()
-            st.rerun()
+        with col2:
+            if st.button("🧠 Discuss Approach", use_container_width=True):
+                st.session_state.approach_approved = False
+                safe_transition(st.session_state.orchestrator.transition_to_mentoring)
+        
+        with col3:
+            if st.button("💻 Back to Coding", use_container_width=True):
+                st.session_state.orchestrator.transition_to_coding()
+                st.rerun()
         
         # Expandable detailed session info
         with st.expander("📊 Detailed Technical Analysis"):
@@ -691,62 +903,11 @@ def render_evaluation_panel():
                 
                 st.markdown("**Session Timeline**")
                 st.write(f"🎯 **Problem:** {st.session_state.current_problem}")
-                st.write(f"📝 **Approach Approved:** {'✅ Yes' if st.session_state.approach_approved else '❌ No'}")
+                st.write(f"🔍 **Approach Approved:** {'✅ Yes' if st.session_state.approach_approved else '❌ No'}")
                 st.write(f"💬 **Mentor Chats:** {mentor_msgs}")
                 st.write(f"🔧 **Code Reviews:** {code_msgs}")
             else:
                 st.info("Detailed analysis not available")
-
-def mint_nft_certificate(problem, skill_level):
-    """Simulate minting an NFT certificate for problem completion"""
-    certificate = {
-        "problem_title": problem["title"],
-        "difficulty": problem["difficulty"],
-        "skill_level": skill_level or "Intermediate",
-        "timestamp": datetime.now().isoformat(),
-        "certificate_id": f"nft_{len(st.session_state.nft_certificates) + 1}_{problem['title']}"
-    }
-    st.session_state.nft_certificates.append(certificate)
-    
-    # Placeholder for Web3 NFT minting (e.g., Ethereum smart contract interaction)
-    # from web3 import Web3
-    # w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'))
-    # contract = w3.eth.contract(address='NFT_CONTRACT_ADDRESS', abi=NFT_CONTRACT_ABI)
-    # tx_hash = contract.functions.mintNFT(user_address, certificate_id).transact()
-    
-    st.success(f"🎨 Minted NFT Certificate for {problem['title']} ({skill_level})!")
-
-def render_skill_progression():
-    """Show skill progression if multiple problems solved"""
-    if 'problem_history' not in st.session_state:
-        st.session_state.problem_history = []
-    
-    if len(st.session_state.problem_history) > 1:
-        st.markdown("### 📈 Skill Progression")
-        
-        problems = [p['problem'] for p in st.session_state.problem_history]
-        scores = [p['technical_score'] for p in st.session_state.problem_history]
-        
-        import plotly.graph_objects as go
-        
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=problems,
-            y=scores,
-            mode='lines+markers',
-            name='Technical Score',
-            line=dict(color='#00D4AA', width=3)
-        ))
-        
-        fig.update_layout(
-            title="Your DSA Journey",
-            xaxis_title="Problems Solved",
-            yaxis_title="Technical Score (1-10)",
-            height=300,
-            showlegend=False
-        )
-        
-        st.plotly_chart(fig, use_container_width=True)
 
 def process_mentor_input(user_input):
     with st.spinner("🤖 AI Mentor is analyzing your approach..."):
@@ -857,16 +1018,6 @@ def process_code_question(question):
         })
         st.rerun()
 
-def render_guidance_panel():
-    if st.session_state.orchestrator.get_current_state() == "mentoring":
-        recommendation = st.session_state.orchestrator.get_next_recommended_action()
-        st.info(f"💡 **Guidance:** {recommendation}")
-        
-        analytics = st.session_state.orchestrator.get_session_analytics()
-        time_in_state = analytics['time_per_state'].get('mentoring', 0)
-        if time_in_state > 180:
-            st.warning("⏰ You've been in discussion phase for a while. Consider asking for a hint or moving to coding!")
-
 def safe_transition(target_state_func):
     current_state = st.session_state.orchestrator.get_current_state()
     if target_state_func():
@@ -875,115 +1026,15 @@ def safe_transition(target_state_func):
     else:
         st.error(f"❌ Cannot transition from {current_state} to requested state")
 
-def award_tokens(amount, reason):
-    st.session_state.dsa_tokens += amount
-    st.session_state.total_earned_tokens += amount
-    
-    st.success(f"🎉 +{amount} $DSA tokens earned! {reason}")
-    
-    st.session_state.orchestrator.log_user_interaction("tokens_earned", {
-        "amount": amount,
-        "reason": reason,
-        "total_tokens": st.session_state.dsa_tokens
-    })
-
-def check_daily_login():
-    today = date.today()
-    last_login = st.session_state.last_login_date
-    
-    if last_login != today:
-        if last_login == today - timedelta(days=1):
-            st.session_state.daily_login_streak += 1
-        else:
-            st.session_state.daily_login_streak = 1
-        
-        st.session_state.last_login_date = today
-        award_tokens(1, "Daily login bonus!")
-        
-        if st.session_state.daily_login_streak == 7:
-            award_tokens(5, "7-day streak bonus!")
-        elif st.session_state.daily_login_streak == 30:
-            award_tokens(15, "30-day streak bonus!")
-
-def calculate_problem_reward(difficulty, hints_used, skill_level):
-    base_rewards = {"Easy": 1, "Medium": 2, "Hard": 3}
-    base = base_rewards.get(difficulty, 1)
-    
-    hint_bonus = max(0, 2 - hints_used) if hints_used <= 2 else 0
-    
-    skill_multipliers = {"Beginner": 1.0, "Intermediate": 1.2, "Advanced": 1.5}
-    multiplier = skill_multipliers.get(skill_level, 1.0)
-    
-    return int(base * multiplier + hint_bonus)
-
-def render_token_dashboard():
-    with st.expander("💰 $DSA Token Dashboard"):
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.metric("Current Balance", f"{st.session_state.dsa_tokens} $DSA")
-            st.metric("Total Earned", f"{st.session_state.total_earned_tokens} $DSA")
-        
-        with col2:
-            st.metric("Login Streak", f"{st.session_state.daily_login_streak} days")
-            st.metric("Daily Problems", st.session_state.problems_solved_today)
-        
-        # USDC Conversion
-        withdrawal_threshold = 100
-        progress = min(st.session_state.dsa_tokens / withdrawal_threshold, 1.0)
-        st.progress(progress, text=f"Progress to USDC conversion: {st.session_state.dsa_tokens}/{withdrawal_threshold} $DSA")
-        
-        if st.session_state.dsa_tokens >= withdrawal_threshold:
-            if st.button("💸 Convert 100 $DSA to USDC", use_container_width=True):
-                # Placeholder for Web3 USDC conversion
-                # from web3 import Web3
-                # w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'))
-                # usdc_contract = w3.eth.contract(address='USDC_CONTRACT_ADDRESS', abi=USDC_CONTRACT_ABI)
-                # tx_hash = usdc_contract.functions.transfer(user_address, 100 * 10**6).transact()
-                
-                st.session_state.dsa_tokens -= 100
-                st.success("💸 Converted 100 $DSA to USDC! (Simulated for demo)")
-                st.session_state.orchestrator.log_user_interaction("usdc_converted", {
-                    "amount": 100,
-                    "new_balance": st.session_state.dsa_tokens
-                })
-        
-        # NFT Certificates
-        if st.session_state.nft_certificates:
-            st.markdown("### 🎨 Your NFT Certificates")
-            for cert in st.session_state.nft_certificates:
-                st.markdown(f"""
-                <div class="nft-badge">
-                    🏆 {cert['problem_title']} ({cert['difficulty']} - {cert['skill_level']})
-                </div>
-                """, unsafe_allow_html=True)
-
 # Main App
 def main():
-    # Simulated wallet connection
-    if not st.session_state.wallet_connected:
-        if st.button("🔗 Connect Wallet", type="primary"):
-            # Placeholder for Web3 wallet connection (e.g., MetaMask)
-            # from web3 import Web3
-            # w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/YOUR_PROJECT_ID'))
-            # accounts = w3.eth.accounts
-            st.session_state.wallet_connected = True
-            st.success("🔗 Wallet connected! (Simulated for demo)")
-    
-    if st.session_state.wallet_connected:
-        st.markdown('<div class="wallet-connected">🔗 Wallet Connected</div>', unsafe_allow_html=True)
-    
-    # Check daily login bonus
-    check_daily_login()
-    
-    # Render token dashboard
-    render_token_dashboard()
-    
     # Set current problem if not set
     if not st.session_state.current_problem:
         st.session_state.current_problem = problems[0]["title"]
         st.session_state.user_code = LANGUAGE_TEMPLATES[st.session_state.selected_language]
-        render_guidance_panel()
+    
+    # Render Web3 enhancement bar (optional)
+    render_web3_enhancement_bar()
     
     # Render top navigation
     render_top_nav()
@@ -1005,12 +1056,51 @@ def main():
         elif current_state == "evaluation":
             render_evaluation_panel()
     
+    # Web3 Dashboard (collapsible)
+    if st.session_state.web3_enabled:
+        with st.expander("🌐 Web3 Dashboard", expanded=False):
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                st.metric("💰 DSA Balance", st.session_state.dsa_tokens)
+            
+            with col2:
+                st.metric("🏆 NFT Certificates", len(st.session_state.nft_certificates))
+            
+            with col3:
+                st.metric("📊 Problems Solved", len(st.session_state.completed_problems))
+            
+            with col4:
+                usdc_convertible = st.session_state.dsa_tokens // 100
+                st.metric("💵 USDC Available", usdc_convertible)
+            
+            # NFT Gallery
+            if st.session_state.nft_certificates:
+                st.markdown("### 🎨 NFT Certificates")
+                cols = st.columns(3)
+                for i, cert in enumerate(st.session_state.nft_certificates):
+                    with cols[i % 3]:
+                        blockchain_badge = "🔗" if cert.get("blockchain") else "📝"
+                        st.markdown(f'''
+                        <div class="nft-badge">
+                            {blockchain_badge} {cert["problem_title"]}
+                            <br><small>{cert["difficulty"]} • {cert["skill_level"]}</small>
+                        </div>
+                        ''', unsafe_allow_html=True)
+            
+            # Recent Web3 Transactions
+            if st.session_state.web3_transactions:
+                st.markdown("### 📜 Recent Blockchain Transactions")
+                for tx in st.session_state.web3_transactions[-3:]:
+                    st.markdown(f"**{tx['type'].title()}** - {tx['amount']} DSA - Hash: `{tx['hash'][:10]}...`")
+    
     # Footer
     st.markdown("---")
     st.markdown(
         '<div style="text-align: center; color: #666; padding: 20px;">'
-        '🤖 <strong>Espyr AI Coach</strong> - Your Web3 DSA preparation companion | '
-        f'Current Phase: {current_state.title()} | '
+        '🤖 <strong>AI DSA Coach</strong> - Your personalized DSA preparation companion'
+        f'{" | 🌐 Web3 Mode Active" if st.session_state.web3_enabled else ""} | '
+        f'Current Phase: {st.session_state.orchestrator.get_current_state().title()} | '
         f'Language: {st.session_state.selected_language}'
         '</div>', 
         unsafe_allow_html=True

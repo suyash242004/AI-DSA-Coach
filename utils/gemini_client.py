@@ -1,25 +1,24 @@
-# import google.generativeai as genai
-# from config import GEMINI_API_KEY
+import google.generativeai as genai
+from config import GEMINI_API_KEY
 
-# genai.configure(api_key=GEMINI_API_KEY)
-
-# # def get_gemini_model():
-# #     return genai.GenerativeModel("models/gemini-1.5-flash")
+genai.configure(api_key=GEMINI_API_KEY)
 
 # def get_gemini_model():
 #     return genai.GenerativeModel("models/gemini-2.0-flash-lite")
-
-
-
-import os
-import google.generativeai as genai
-
 def get_gemini_model():
-    api_key = os.getenv("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY environment variable not set")
-    genai.configure(api_key=api_key)
-    return genai.GenerativeModel("models/gemini-2.0-flash-lite")
+    return genai.GenerativeModel("models/gemini-2.5-flash")
+
+
+
+# import os
+# import google.generativeai as genai
+
+# def get_gemini_model():
+#     api_key = os.getenv("GEMINI_API_KEY")
+#     if not api_key:
+#         raise ValueError("GEMINI_API_KEY environment variable not set")
+#     genai.configure(api_key=api_key)
+#     return genai.GenerativeModel("models/gemini-2.0-flash-lite")
 
 
 
