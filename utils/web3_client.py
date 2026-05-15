@@ -1,3 +1,4 @@
+# 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
 import json
 import time
 from web3 import Web3
@@ -18,14 +19,13 @@ class Web3Client:
         self.initialized = False
         
     def initialize(self):
-        """Initialize Web3 connection to U2U mainnet"""
+        """Initialize Web3 connection to 0G Testnet"""
         try:
-            # U2U Mainnet RPC - you'll get this from HackQuest
-            rpc_url = st.secrets.get("U2U_RPC", "https://rpc-mainnet.u2u.xyz")
+            rpc_url = st.secrets.get("OG_RPC", "https://evmrpc-testnet.0g.ai")
             self.w3 = Web3(Web3.HTTPProvider(rpc_url))
             
             if not self.w3.is_connected():
-                st.error("Failed to connect to U2U network")
+                st.error("Failed to connect to 0G network")
                 return False
                 
             # Load contract addresses from secrets
@@ -94,6 +94,8 @@ class Web3Client:
             nonce = self.w3.eth.get_transaction_count(deployer.address)
             transaction = self.nft_contract.functions.mintBadge(
                 Web3.to_checksum_address(user_address),
+                problem_title,
+                difficulty,
                 token_uri
             ).build_transaction({
                 'from': deployer.address,
@@ -104,7 +106,8 @@ class Web3Client:
             
             # Sign and send transaction
             signed_txn = self.w3.eth.account.sign_transaction(transaction, deployer.key)
-            tx_hash = self.w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+            raw_tx = signed_txn.rawTransaction if hasattr(signed_txn, 'rawTransaction') else signed_txn.raw_transaction
+            tx_hash = self.w3.eth.send_raw_transaction(raw_tx)
             
             # Wait for confirmation
             receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
@@ -146,7 +149,8 @@ class Web3Client:
             
             # Sign and send transaction
             signed_txn = self.w3.eth.account.sign_transaction(transaction, deployer.key)
-            tx_hash = self.w3.eth.send_raw_transaction(signed_txn.rawTransaction)
+            raw_tx = signed_txn.rawTransaction if hasattr(signed_txn, 'rawTransaction') else signed_txn.raw_transaction
+            tx_hash = self.w3.eth.send_raw_transaction(raw_tx)
             
             # Wait for confirmation
             receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)

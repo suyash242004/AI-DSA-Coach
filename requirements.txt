@@ -1,6 +1,7 @@
 streamlit
 openai
 tiktoken
+# 0G Hackathon 2026 Submission dependencies
 google-generativeai
 google-cloud-aiplatform
 # Add to existing requirements

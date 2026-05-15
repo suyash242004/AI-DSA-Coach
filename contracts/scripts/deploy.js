@@ -67,7 +67,7 @@ async function main() {
   console.log("\n=== DEPLOYMENT COMPLETE ===");
   console.log("DSA Token:", dsaTokenAddress);
   console.log("DSA Badge:", dsaBadgeAddress);
-  console.log("Explorer:", `https://chainscan-newton.0g.ai/address/${dsaTokenAddress}`);
+  console.log("Explorer:", `https://chainscan-galileo.0g.ai/address/${dsaTokenAddress}`);
   console.log("ABIs saved to data/ directory");
 
   console.log("\n=== UPDATE YOUR SECRETS ===");

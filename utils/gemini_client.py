@@ -1,3 +1,4 @@
+# 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
 import google.generativeai as genai
 from config import GEMINI_API_KEY
 

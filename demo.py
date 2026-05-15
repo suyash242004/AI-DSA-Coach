@@ -1,3 +1,4 @@
+# 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
 import streamlit as st
 import json
 from agents.mentor_agent import MentorAgent
@@ -513,15 +514,22 @@ def render_web3_enhancement_bar():
             if st.session_state.wallet_connected:
                 st.markdown(f'<div class="wallet-connected">🟢 Wallet Connected</div>', unsafe_allow_html=True)
             else:
+                st.markdown("Connect your wallet to earn on-chain rewards!")
+                wallet_input = st.text_input("Enter your 0G Wallet Address:", key="wallet_input_field")
                 if st.button("🔗 Connect Wallet", key="connect_wallet_btn"):
-                    # Simulate wallet connection
-                    st.session_state.user_wallet_address = "0x742d35Cc6634C0532925a3b8D5c27Aa4fCd52Ed2"
-                    st.session_state.wallet_connected = True
-                    st.success("Wallet connected!")
-                    st.rerun()
+                    if wallet_input:
+                        st.session_state.user_wallet_address = wallet_input
+                        st.session_state.wallet_connected = True
+                        st.success("Wallet connected!")
+                        st.rerun()
+                    else:
+                        st.error("Please enter a valid wallet address.")
         
         with col2:
             st.markdown(f'<div class="token-display">💰 {st.session_state.dsa_tokens} DSA</div>', unsafe_allow_html=True)
+            if st.session_state.wallet_connected:
+                if st.button("🎁 Claim Welcome Tokens"):
+                    award_tokens_web3(50, "Hackathon Demo Bonus!")
         
         with col3:
             st.markdown(f"🏆 **NFTs:** {len(st.session_state.nft_certificates)}")
@@ -642,7 +650,7 @@ def render_problem_panel():
         st.markdown(f"""
         - **Base Reward:** {base_reward} DSA tokens
         - **Efficiency Bonus:** +2 DSA (no hints used)
-        - **NFT Certificate:** Minted on U2U blockchain
+        - **NFT Certificate:** Minted on 0G blockchain
         """)
 
 def render_mentor_panel():

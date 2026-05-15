@@ -26,6 +26,23 @@ A smart, multi-agent web application to guide users in solving Data Structures a
 
 AI DSA Coach is an innovative platform that combines a LeetCode-like interface with a multi-agent AI system to enhance DSA skills. It dynamically adapts to Beginner, Intermediate, and Advanced users, offering personalized guidance through problem-solving, coding, and evaluation phases. 🌟
 
+---
+
+## 🌐 0G Network Integration (Hackathon 2026)
+
+This project integrates with the **0G Galileo Testnet** to reward users with verifiable on-chain assets for learning Data Structures & Algorithms. 
+
+### 🏆 Smart Contracts Deployed
+- **DSA Token Contract:** [`0xb31AcDfaAac74731e655c96A90EB910dD827bFFB`](https://chainscan-galileo.0g.ai/address/0xb31AcDfaAac74731e655c96A90EB910dD827bFFB)
+- **DSA Badge NFT Contract:** [`0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366`](https://chainscan-galileo.0g.ai/address/0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366)
+
+### ⛓️ On-Chain Proofs
+When users complete a DSA challenge or log in via Web3 Mode, they are rewarded directly to their wallet:
+- **Demo Wallet Address:** [`0xFCF1cdaB5269342B0b5447E3A5b8fa56c6B7B152`](https://chainscan-galileo.0g.ai/address/0xfcf1cdab5269342b0b5447e3a5b8fa56c6b7b152)
+- **NFT Minting Proof:** [View Transaction on 0G Explorer](https://chainscan-galileo.0g.ai/tx/f9717bcf59cf5a942665e2f5848ad5cefe337177ce63ec01531a7066fed68b0a)
+
+---
+
 ## 🛠️ Installation
 
 1. **Clone the Repository**:
