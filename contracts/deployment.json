@@ -1,9 +1,9 @@
 {
-  "network": "u2u_mainnet",
-  "chainId": 39,
-  "DSAToken": "0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366",
-  "DSABadge": "0xB6561def62C1D3C6a1dc75c18577CD7a3A0dF3bf",
+  "network": "0g_testnet",
+  "chainId": 16602,
+  "DSAToken": "0xb31AcDfaAac74731e655c96A90EB910dD827bFFB",
+  "DSABadge": "0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366",
   "deployer": "0xFCF1cdaB5269342B0b5447E3A5b8fa56c6B7B152",
-  "deployedAt": "2025-10-04T14:49:28.787Z",
-  "blockNumber": 39953809
+  "deployedAt": "2026-05-15T12:17:44.498Z",
+  "blockNumber": 33450139
 }

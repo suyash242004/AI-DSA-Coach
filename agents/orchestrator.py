@@ -1,3 +1,4 @@
+# 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
 from enum import Enum
 from typing import Dict, Any, Optional
 import time

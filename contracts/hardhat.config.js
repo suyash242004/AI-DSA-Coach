@@ -17,6 +17,20 @@ module.exports = {
     artifacts: "./artifacts",
   },
   networks: {
+    "0g_mainnet": {
+      url: "https://evmrpc.0g.ai",
+      accounts: process.env.DEPLOYER_PRIVATE_KEY
+        ? [process.env.DEPLOYER_PRIVATE_KEY]
+        : [],
+      chainId: 16661,
+    },
+    "0g_testnet": {
+      url: "https://evmrpc-testnet.0g.ai",
+      accounts: process.env.DEPLOYER_PRIVATE_KEY
+        ? [process.env.DEPLOYER_PRIVATE_KEY]
+        : [],
+      chainId: 16602,
+    },
     u2u_mainnet: {
       url: "https://rpc-mainnet.u2u.xyz",
       accounts: process.env.DEPLOYER_PRIVATE_KEY

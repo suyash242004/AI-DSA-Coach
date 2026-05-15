@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-  console.log("Deploying AI DSA Coach contracts to U2U mainnet...");
+  console.log("Deploying AI DSA Coach contracts to 0G Testnet...");
 
   const [deployer] = await ethers.getSigners();
   console.log("Deploying with account:", deployer.address);
@@ -29,8 +29,8 @@ async function main() {
 
   // Save deployment info
   const deploymentInfo = {
-    network: "u2u_mainnet",
-    chainId: 39,
+    network: "0g_testnet",
+    chainId: 16602,
     DSAToken: dsaTokenAddress,
     DSABadge: dsaBadgeAddress,
     deployer: deployer.address,
@@ -67,7 +67,7 @@ async function main() {
   console.log("\n=== DEPLOYMENT COMPLETE ===");
   console.log("DSA Token:", dsaTokenAddress);
   console.log("DSA Badge:", dsaBadgeAddress);
-  console.log("Explorer:", `https://u2uscan.xyz/address/${dsaTokenAddress}`);
+  console.log("Explorer:", `https://chainscan-newton.0g.ai/address/${dsaTokenAddress}`);
   console.log("ABIs saved to data/ directory");
 
   console.log("\n=== UPDATE YOUR SECRETS ===");

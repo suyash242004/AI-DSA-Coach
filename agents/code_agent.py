@@ -1,4 +1,5 @@
 
+# 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
 from utils.gemini_client import get_gemini_model
 import re
 import json

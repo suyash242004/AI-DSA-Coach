@@ -3,10 +3,12 @@ from config import GEMINI_API_KEY
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# def get_gemini_model():
-#     return genai.GenerativeModel("models/gemini-2.0-flash-lite")
+# gemini-3.1-flash-lite-preview	15 RPM
+
 def get_gemini_model():
-    return genai.GenerativeModel("models/gemini-2.5-flash")
+    return genai.GenerativeModel("models/gemini-3.1-flash-lite-preview")
+# def get_gemini_model():
+#     return genai.GenerativeModel("models/gemini-2.5-flash")
 
 
 

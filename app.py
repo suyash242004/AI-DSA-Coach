@@ -1,3 +1,8 @@
+# 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
+# streamlit run app.py
+# python -m venv venv
+# venv\Scripts\activate
+
 import streamlit as st
 import json
 from agents.mentor_agent import MentorAgent
