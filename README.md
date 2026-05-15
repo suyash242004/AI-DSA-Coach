@@ -1,126 +1,71 @@
-## 🧠 AI DSA Coach 
+<div align="center">
+  <h1>🧠 AI DSA Coach</h1>
+  <p><em>Your intelligent, on-chain companion for mastering Data Structures & Algorithms.</em></p>
+  
+  [![0G Network Integration](https://img.shields.io/badge/Network-0G_Galileo_Testnet-green?style=for-the-badge&logo=web3.js)](https://chainscan-galileo.0g.ai/)
+  [![Python](https://img.shields.io/badge/Python-3.8+-blue?style=for-the-badge&logo=python)](https://python.org)
+  [![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit)](https://streamlit.io)
+  [![Gemini](https://img.shields.io/badge/AI-Google_Gemini-8E75B2?style=for-the-badge)](https://deepmind.google/technologies/gemini/)
+</div>
 
-A smart, multi-agent web application to guide users in solving Data Structures and Algorithms (DSA) problems — like LeetCode, but with an AI mentor. 🚀
-
-## 🚀 Features
-
-- **Mentor Agent** 🗣️
-
-  - Asks for the user’s approach first to foster critical thinking.
-  - Provides adaptive hints tailored to the user’s skill level (Beginner, Intermediate, Advanced).
-  - Motivates users and triggers the code editor when the approach is ready.
-
-- **Code Agent** 🧪
-
-  - Evaluates user code for correctness, edge cases, and performance.
-  - Suggests optimizations and improvements.
-  - Redirects users to the Mentor Agent if logical gaps are detected.
-
-- **Evaluation Summary** 📊
-
-  - Analyzes the clarity of the user’s thought process.
-  - Tracks the number of hints used during problem-solving.
-  - Rates code optimality based on efficiency and complexity.
+<br/>
 
 ## 📋 Overview
 
-AI DSA Coach is an innovative platform that combines a LeetCode-like interface with a multi-agent AI system to enhance DSA skills. It dynamically adapts to Beginner, Intermediate, and Advanced users, offering personalized guidance through problem-solving, coding, and evaluation phases. 🌟
+**AI DSA Coach** is a next-generation learning platform that combines a LeetCode-like coding environment with a multi-agent AI mentor system. It dynamically adapts to your skill level (Beginner to Advanced), gently guides you through your thought process, evaluates your code, and rewards your learning with verifiable **on-chain tokens and NFTs**!
 
 ---
 
 ## 🌐 0G Network Integration (Hackathon 2026)
 
-This project integrates with the **0G Galileo Testnet** to reward users with verifiable on-chain assets for learning Data Structures & Algorithms. 
+This project fully integrates with the **0G Galileo Testnet** to reward users with verifiable on-chain assets upon completing DSA challenges!
 
-### 🏆 Smart Contracts Deployed
+### 🏆 Verified Smart Contracts
 - **DSA Token Contract:** [`0xb31AcDfaAac74731e655c96A90EB910dD827bFFB`](https://chainscan-galileo.0g.ai/address/0xb31AcDfaAac74731e655c96A90EB910dD827bFFB)
 - **DSA Badge NFT Contract:** [`0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366`](https://chainscan-galileo.0g.ai/address/0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366)
 
 ### ⛓️ On-Chain Proofs
-When users complete a DSA challenge or log in via Web3 Mode, they are rewarded directly to their wallet:
-- **Demo Wallet Address:** [`0xFCF1cdaB5269342B0b5447E3A5b8fa56c6B7B152`](https://chainscan-galileo.0g.ai/address/0xfcf1cdab5269342b0b5447e3a5b8fa56c6b7b152)
+- **Hackathon Demo Wallet:** [`0xFCF1cdaB5269342B0b5447E3A5b8fa56c6B7B152`](https://chainscan-galileo.0g.ai/address/0xfcf1cdab5269342b0b5447e3a5b8fa56c6b7b152)
 - **NFT Minting Proof:** [View Transaction on 0G Explorer](https://chainscan-galileo.0g.ai/tx/f9717bcf59cf5a942665e2f5848ad5cefe337177ce63ec01531a7066fed68b0a)
 
 ---
 
-## 🛠️ Installation
+## 🚀 Key Features
 
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https:https://github.com/suyash242004/AI-DSA-Coach.git
-   cd dsa-ai-coach
-   ```
-
-2. **Install Dependencies**: Ensure Python 3.8+ is installed, then run:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Configure Gemini API**:
-
-   - Obtain an API key from Google Cloud for Gemini.
-
-   - Configure `utils/gemini_client.py` with your API key:
-
-     ```python
-     from google.cloud import aiplatform
-     def get_gemini_model():
-         return aiplatform.Model("your-model-name")
-     ```
-
-4. **Run the App**:
-
-   ```bash
-   streamlit run app.py
-   ```
-
-   Access it at `http://localhost:8501`. 🌐
-
-## 📖 Usage
-
-1. **Select a Problem**: Choose a DSA problem from the dropdown. 📚
-2. **Discuss Approach**: Share your thought process with the Mentor Agent. 🧠
-3. **Write Code**: Implement your solution in the code editor once approved. 💻
-4. **Test & Optimize**: Use the Code Agent to test and improve your code. 🧪
-5. **Review Evaluation**: Get detailed feedback on your performance. 📈
-
-## 📂 File Structure
-
-```
-dsa-ai-coach/
-├── app.py                    # Main Streamlit entrypoint 🖥️
-├── requirements.txt          # Dependencies 🐍
-├── config.py                 # Configuration settings ⚙️
-├── agents/
-│   ├── mentor_agent.py       # Mentor logic: classify skill, give hints 🗣️
-│   ├── code_agent.py         # Code evaluator logic 🧪
-│   ├── evaluation_agent.py   # Session summary 📊
-│   ├── persona_agent.py      # User profile tracking 👤
-│   └── orchestrator.py       # Controls agent flow/state 🎮
-├── utils/
-│   ├── gemini_client.py      # Gemini API configuration 🔌
-│   └── data/
-│       └── problems.json     # Sample DSA problems 📋
-```
-
-## 🤝 Contributing
-
-Contributions are welcome! 🙌
-
-1. Fork the repo. 🍴
-2. Create a branch (`git checkout -b feature/your-feature`). 🌿
-3. Commit changes (`git commit -m "Add feature"`). 💾
-4. Push to the branch (`git push origin feature/your-feature`). 🚀
-5. Open a Pull Request. 📬
-
-Please follow PEP 8 standards and include clear comments in your code. 😊
-
-## 📜 License
-
-Licensed under the MIT License. See LICENSE for details. 🗳️
+*   **🗣️ Mentor Agent:** Fosters critical thinking by evaluating your approach *before* you write code. Provides hints based on your skill level without giving away the answer.
+*   **💻 Code Agent:** Runs and evaluates your code for correctness, edge cases, and time/space complexity optimality.
+*   **📈 Evaluation Agent:** Generates a comprehensive summary of your performance, tracks hint usage, and updates your progression.
+*   **💰 Web3 Rewards:** Connect your wallet to earn `$DSA` tokens for solving problems and mint unique NFT badges for your achievements!
 
 ---
 
-Happy coding with AI DSA Coach! 🎉💪
+## 🛠️ Quick Start
+
+1. **Clone & Install**
+   ```bash
+   git clone https://github.com/suyash242004/AI-DSA-Coach.git
+   cd AI-DSA-Coach
+   pip install -r requirements.txt
+   ```
+
+2. **Run the Application**
+   ```bash
+   streamlit run app.py
+   # Or run demo.py for the full Web3 interface
+   streamlit run demo.py
+   ```
+   *The app will be available at `http://localhost:8501`*
+
+---
+
+## 🎮 How to Use
+
+1. **Pick a Challenge:** Select a DSA problem from the dropdown.
+2. **Connect Wallet:** Toggle Web3 mode and link your 0G/Metamask wallet.
+3. **Discuss Approach:** Explain your strategy to the Mentor Agent.
+4. **Write Code:** Implement your approved logic in the built-in editor.
+5. **Get Rewarded:** Analyze your performance and claim your on-chain tokens!
+
+<div align="center">
+  <i>Built with ❤️ for the 0G APAC Hackathon 2026</i>
+</div>
