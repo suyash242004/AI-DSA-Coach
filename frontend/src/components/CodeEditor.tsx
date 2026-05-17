@@ -158,7 +158,6 @@ export default function CodeEditor() {
             placeholder="Please enter your code here."
             onChange={(evn) => dispatch({ type: "SET_CODE", code: evn.target.value })}
             padding={16}
-            minHeight="100%"
             style={{
               fontSize: 14,
               backgroundColor: "transparent",
