@@ -41,35 +41,48 @@ This project fully integrates with the **0G Galileo Testnet** to reward users wi
 
 ## 🛠️ Quick Start
 
-1. **Clone & Install Backend**
-   ```bash
-   git clone https://github.com/suyash242004/AI-DSA-Coach.git
-   cd AI-DSA-Coach
-   pip install -r requirements.txt
-   ```
+### 📦 Installation
 
-2. **Install Frontend**
-   ```bash
-   cd frontend
-   npm install
-   ```
+```bash
+git clone https://github.com/suyash242004/AI-DSA-Coach.git
+cd AI-DSA-Coach
 
-3. **Run the Application (Requires 2 Terminals)**
+# Install Backend / Streamlit dependencies
+pip install -r requirements.txt
 
-   **Terminal 1 (Backend):**
-   ```bash
-   cd AI-DSA-Coach
-   .\run_backend.bat
-   # Or manually: uvicorn backend.api:app --reload --port 8000
-   ```
+# Install Frontend dependencies (Next.js)
+cd frontend
+npm install
+```
 
-   **Terminal 2 (Frontend):**
-   ```bash
-   cd AI-DSA-Coach/frontend
-   npm run dev
-   ```
-   
-   *The app will be available at `http://localhost:3000`*
+### 🚀 Running the App (Two Options)
+
+#### Option 1: Classic Streamlit Interface (with Web3 Integration)
+This runs the original monolithic interface including the Web3 wallet connection.
+```bash
+cd AI-DSA-Coach
+streamlit run app.py
+# Or run demo.py for the full Web3 interface:
+streamlit run demo.py
+```
+*Available at `http://localhost:8501`*
+
+#### Option 2: Modern Next.js Interface (Recommended)
+This runs the new high-performance, split-pane IDE interface. **Requires 2 Terminals.**
+
+**Terminal 1 (Backend):**
+```bash
+cd AI-DSA-Coach
+.\run_backend.bat
+# Or manually: uvicorn backend.api:app --reload --port 8000
+```
+
+**Terminal 2 (Frontend):**
+```bash
+cd AI-DSA-Coach/frontend
+npm run dev
+```
+*Available at `http://localhost:3000`*
 
 ---
 
