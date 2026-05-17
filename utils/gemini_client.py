@@ -1,6 +1,15 @@
 # 0G Hackathon 2026 Submission - Integrated with 0G Modular Infrastructure
+import os
 import google.generativeai as genai
-from config import GEMINI_API_KEY
+
+# Try to load from local config.py, otherwise fallback to Environment Variables (for Render deployment)
+try:
+    from config import GEMINI_API_KEY
+except ImportError:
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY is missing! Set it in config.py or as an Environment Variable.")
 
 genai.configure(api_key=GEMINI_API_KEY)
 
