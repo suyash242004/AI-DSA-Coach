@@ -5,7 +5,7 @@ import { Play, Send, RotateCcw, BarChart2, Loader2, MessageSquare, ChevronDown }
 import { useApp } from "@/lib/context";
 import { api } from "@/lib/api";
 
-const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
+import CodeEditorUIW from "@uiw/react-textarea-code-editor";
 
 const LANGUAGES = [
   { id: "python",     label: "Python",     monacoId: "python",     ext: "py" },
@@ -149,33 +149,21 @@ export default function CodeEditor() {
         </button>
       </div>
 
-      {/* Monaco Editor */}
-      <div className="flex-1 min-h-0 rounded-xl overflow-hidden border border-white/10 w-full relative">
-        <div className="absolute inset-0">
-          <MonacoEditor
-            height="100%"
-            language={currentLang.monacoId}
-            theme="vs-dark"
+      {/* Simple Textarea Editor - 100% bug free cursor */}
+      <div className="flex-1 min-h-0 rounded-xl overflow-hidden border border-white/10 w-full relative bg-[#1e1e1e]">
+        <div className="absolute inset-0 overflow-auto custom-scrollbar">
+          <CodeEditorUIW
             value={state.userCode || DEFAULT_CODE[language]}
-            onChange={(val) => dispatch({ type: "SET_CODE", code: val ?? "" })}
-            options={{
+            language={currentLang.monacoId}
+            placeholder="Please enter your code here."
+            onChange={(evn) => dispatch({ type: "SET_CODE", code: evn.target.value })}
+            padding={16}
+            minHeight="100%"
+            style={{
               fontSize: 14,
+              backgroundColor: "transparent",
               fontFamily: "'JetBrains Mono', 'Fira Code', 'Consolas', monospace",
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              lineNumbers: "on",
-              padding: { top: 12, bottom: 12 },
-              renderLineHighlight: "gutter",
-              cursorBlinking: "smooth",
-              smoothScrolling: true,
-              tabSize: 4,
-              automaticLayout: true,
-              wordWrap: "on", // Wrap text instead of horizontal scrolling to fix cursor issues
-              scrollbar: {
-                vertical: "auto",
-                horizontal: "hidden"
-              },
-              overviewRulerLanes: 0
+              outline: "none"
             }}
           />
         </div>

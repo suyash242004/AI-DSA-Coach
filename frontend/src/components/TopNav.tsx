@@ -86,21 +86,16 @@ export default function TopNav({ problems, onSelectProblem }: Props) {
         })}
       </div>
 
-      {/* Skill Level Selector */}
-      <div className="relative flex-shrink-0">
-        <select
-          value={state.skillLevel || "Intermediate"}
-          onChange={(e) => dispatch({ type: "SET_SKILL", level: e.target.value })}
-          className={`appearance-none flex items-center gap-1.5 px-3 py-1.5 pr-7 rounded-xl border text-xs font-bold focus:outline-none cursor-pointer transition-colors ${
-            skill ? `${skill.color} ${skill.bg} ${skill.border}` : "text-blue-400 bg-blue-400/10 border-blue-400/30"
-          }`}
-        >
-          <option value="Beginner" className="bg-[#111118] text-amber-400">🎯 Beginner</option>
-          <option value="Intermediate" className="bg-[#111118] text-blue-400">🎯 Intermediate</option>
-          <option value="Advanced" className="bg-[#111118] text-emerald-400">🎯 Advanced</option>
-        </select>
-        <ChevronDown className={`absolute right-2 top-1/2 -translate-y-1/2 w-3 h-3 pointer-events-none ${skill ? skill.color : "text-blue-400"}`} />
-      </div>
+      {/* Skill Level Badge */}
+      {skill && state.skillLevel ? (
+        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold ${skill.color} ${skill.bg} ${skill.border}`}>
+          🎯 {state.skillLevel}
+        </div>
+      ) : (
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold text-slate-500 bg-white/5 border-white/10">
+          🎯 Detecting Level...
+        </div>
+      )}
 
       {/* Active Agent + pulse */}
       <div className="ml-auto flex items-center gap-2 bg-white/5 border border-white/10 rounded-xl px-3 py-1.5">
