@@ -16,7 +16,7 @@
 
 ---
 
-## 🌐 0G Network Integration (Hackathon 2026)
+## 🌐 0G Network Integration
 
 This project fully integrates with the **0G Galileo Testnet** to reward users with verifiable on-chain assets upon completing DSA challenges!
 
@@ -25,7 +25,7 @@ This project fully integrates with the **0G Galileo Testnet** to reward users wi
 - **DSA Badge NFT Contract:** [`0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366`](https://chainscan-galileo.0g.ai/address/0xB253e155c3fe23772fB6254A4CAb3cF6BcA78366)
 
 ### ⛓️ On-Chain Proofs
-- **Hackathon Demo Wallet:** [`0xFCF1cdaB5269342B0b5447E3A5b8fa56c6B7B152`](https://chainscan-galileo.0g.ai/address/0xfcf1cdab5269342b0b5447e3a5b8fa56c6b7b152)
+- **Demo Wallet:** [`0xFCF1cdaB5269342B0b5447E3A5b8fa56c6B7B152`](https://chainscan-galileo.0g.ai/address/0xfcf1cdab5269342b0b5447e3a5b8fa56c6b7b152)
 - **NFT Minting Proof:** [View Transaction on 0G Explorer](https://chainscan-galileo.0g.ai/tx/f9717bcf59cf5a942665e2f5848ad5cefe337177ce63ec01531a7066fed68b0a)
 
 ---
@@ -95,5 +95,5 @@ npm run dev
 5. **Get Rewarded:** Analyze your performance and claim your on-chain tokens!
 
 <div align="center">
-  <i>Built with ❤️ for the 0G APAC Hackathon 2026</i>
+  <i>Built with ❤️</i>
 </div>
