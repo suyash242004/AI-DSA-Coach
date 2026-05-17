@@ -9,21 +9,24 @@ class CodeAgent:
     def __init__(self):
         self.model = get_gemini_model()
     
-    def evaluate_code(self, user_code: str, problem: dict, skill_level: str) -> dict:
+    def evaluate_code(self, user_code: str, problem: dict, skill_level: str, language: str = "python") -> dict:
         """
         Enhanced comprehensive code evaluation with better error detection
         """
         
-        # First, check if code is syntactically valid
-        syntax_check = self._check_syntax(user_code)
-        if not syntax_check["valid"]:
-            return {
-                "passed": False,
-                "feedback": f"❌ **Syntax Error:** {syntax_check['error']}\n\nPlease fix the syntax and try again.",
-                "bugs": [syntax_check['error']],
-                "optimizations": [],
-                "complexity": {}
-            }
+        # Only run Python-specific syntax check for Python code
+        if language.lower() == "python":
+            syntax_check = self._check_syntax(user_code)
+            if not syntax_check["valid"]:
+                return {
+                    "passed": False,
+                    "feedback": f"❌ **Syntax Error:** {syntax_check['error']}\n\nPlease fix the syntax and try again.",
+                    "bugs": [syntax_check['error']],
+                    "optimizations": [],
+                    "complexity": {}
+                }
+        
+        lang_display = language.upper() if language != "python" else "Python"
         
         # Enhanced prompt for better evaluation
         prompt = f"""
@@ -31,9 +34,10 @@ You are an expert code reviewer. Analyze this DSA solution quickly and concisely
 
 Problem: {problem['title']} ({problem['difficulty']})
 Student Level: {skill_level}
+Language: {lang_display}
 
 Code:
-```python
+```{language}
 {user_code}
 ```
 

@@ -1,0 +1,3 @@
+@echo off
+echo Starting AI DSA Coach Backend...
+"C:\Users\suyas\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\Scripts\uvicorn.exe" backend.api:app --reload --port 8000

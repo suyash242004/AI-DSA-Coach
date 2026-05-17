@@ -41,20 +41,35 @@ This project fully integrates with the **0G Galileo Testnet** to reward users wi
 
 ## 🛠️ Quick Start
 
-1. **Clone & Install**
+1. **Clone & Install Backend**
    ```bash
    git clone https://github.com/suyash242004/AI-DSA-Coach.git
    cd AI-DSA-Coach
    pip install -r requirements.txt
    ```
 
-2. **Run the Application**
+2. **Install Frontend**
    ```bash
-   streamlit run app.py
-   # Or run demo.py for the full Web3 interface
-   streamlit run demo.py
+   cd frontend
+   npm install
    ```
-   *The app will be available at `http://localhost:8501`*
+
+3. **Run the Application (Requires 2 Terminals)**
+
+   **Terminal 1 (Backend):**
+   ```bash
+   cd AI-DSA-Coach
+   .\run_backend.bat
+   # Or manually: uvicorn backend.api:app --reload --port 8000
+   ```
+
+   **Terminal 2 (Frontend):**
+   ```bash
+   cd AI-DSA-Coach/frontend
+   npm run dev
+   ```
+   
+   *The app will be available at `http://localhost:3000`*
 
 ---
 
