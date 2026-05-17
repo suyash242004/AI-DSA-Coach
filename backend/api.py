@@ -20,10 +20,14 @@ from agents.orchestrator import AgentOrchestrator
 
 app = FastAPI(title="AI DSA Coach API", version="1.0.0")
 
-# Allow requests from Next.js dev server
+# Allow requests from Next.js dev server and Vercel
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://127.0.0.1:3000",
+        "https://ai-dsa-coach-theta.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -175,20 +179,24 @@ def code_evaluate(req: CodeEvaluateRequest):
 @app.post("/code/assist")
 def code_assist(req: CodeAssistRequest):
     """Chat assistance from the Code Agent"""
-    session = get_session(req.session_id)
-    agent: CodeAgent = session["code"]
+    try:
+        session = get_session(req.session_id)
+        agent: CodeAgent = session["code"]
 
-    response = agent.chat_assistance(
-        question=req.question,
-        user_code=req.user_code,
-        problem=req.problem,
-        skill_level=req.skill_level or session["skill_level"] or "Intermediate"
-    )
+        response = agent.chat_assistance(
+            user_question=req.question,
+            user_code=req.user_code,
+            problem=req.problem,
+            skill_level=req.skill_level or session["skill_level"] or "Intermediate"
+        )
 
-    session["code_conversation"].append({"role": "user", "content": req.question})
-    session["code_conversation"].append({"role": "code_agent", "content": response})
+        session["code_conversation"].append({"role": "user", "content": req.question})
+        session["code_conversation"].append({"role": "code_agent", "content": response})
 
-    return {"response": response, "conversation": session["code_conversation"]}
+        return {"response": response, "conversation": session["code_conversation"]}
+    except Exception as e:
+        import traceback
+        return {"response": f"Backend Error: {str(e)}\n{traceback.format_exc()}", "conversation": []}
 
 @app.post("/evaluate")
 def evaluate_session(req: EvaluateRequest):
